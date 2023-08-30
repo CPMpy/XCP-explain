@@ -58,3 +58,9 @@ pip install -e .
 ├── img                            # Images used in the tutorial
 └── read_data.py                   # Helper functions to read and wrangle NSP data
 ```
+
+## References
+
+> [1] Korikov, A., & Beck, J. C. (2021). Counterfactual explanations via inverse constraint programming. In 27th International Conference on Principles and Practice of Constraint Programming (CP 2021). Schloss Dagstuhl-Leibniz-Zentrum für Informatik.
+
+> [2] Liffiton, M.H., & Malik, A. (2013). Enumerating infeasibility: Finding multiple MUSes quickly. In Proceedings of the 10th International Conference on Integration of AI and OR Techniques in Constraint Programming (CPAIOR 2013) (pp. 160–175)
