@@ -1,8 +1,5 @@
 # Explainable Constraint Solving - A Hands-On Tutorial
 
-Html version of the slides can be viewed here, press `Space` to go to the next slide:
-https://raw.githack.com/CPMpy/CP23-tutorial/main/hands-on-tutorial.slides.html#/1
-
 ### Authored by Ignace Bleukx, Dimos Tsouros and Tias Guns
 
 This repository contains the code and runnable notebook for the Explainable Constraint Solving tutorial at the CP2023 conference.
