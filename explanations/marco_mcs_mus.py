@@ -127,7 +127,10 @@ class MapSolver:
                A seed as an array of 0-based constraint indexes.
         """
         # try to select a lot, then it is more likely to be unsat
-        self.solver.solution_hint(self.indicators, [1]*len(self.indicators))
+        try:
+            self.solver.solution_hint(self.indicators, [1]*len(self.indicators))
+        except:
+            pass
         if self.solver.solve() is False:
             return None
         return [i for i,v in enumerate(self.indicators) if v.value()]
