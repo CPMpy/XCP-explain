@@ -15,7 +15,7 @@ def mus(soft, hard):
 
 def maxsat(soft, hard=[]):
 
-    soft = toplevel_list(soft)
+    soft = toplevel_list(soft, merge_and=False)
     assump = cp.boolvar(shape=len(soft))
     dmap = dict(zip(assump, soft))
 
@@ -27,11 +27,11 @@ def maxsat(soft, hard=[]):
 
     return [dmap[a] for a in assump if a.value()]
 
-def mcs(soft, hard=[]):
+def mcs(soft, hard=[], solver="ortools"):
 
-    soft = toplevel_list(soft)
+    soft = toplevel_list(soft, merge_and=False)
     assump = cp.boolvar(shape=len(soft))
-    s = cp.SolverLookup.get("ortools")
+    s = cp.SolverLookup.get(solver)
     s += hard
     s += assump.implies(soft)
 
@@ -43,11 +43,11 @@ def mcs(soft, hard=[]):
     return [dmap[a] for a in mcs]
 
 
-def optimal_mcs(soft, hard=[]):
+def optimal_mcs(soft, hard=[], solver="ortools"):
 
-    soft = toplevel_list(soft)
+    soft = toplevel_list(soft, merge_and=False)
     assump = cp.boolvar(shape=len(soft))
-    s = cp.SolverLookup.get("ortools")
+    s = cp.SolverLookup.get(solver)
     s += hard
     s += assump.implies(soft)
 
