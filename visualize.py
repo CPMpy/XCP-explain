@@ -2,8 +2,8 @@
 import pandas as pd
 import numpy as np
 
-import matplotlib
-import matplotlib.colors as mcolors
+import matplotlib.pyplot as plt
+
 
 def visualize(sol, factory):
     weeks = [f"Week {i + 1}" for i in range(factory.data.horizon // 7)]
@@ -27,25 +27,42 @@ def visualize(sol, factory):
     df["Total shifts"] = (df != "F").sum(axis=1)  # shifts done by nurse
 
     subset = (df.index.tolist()[:-len(factory.data.shifts)], df.columns[:-1])
-    style = df.style.set_table_styles([{'selector': '.data', 'props': [('text-align', 'center')]}])
+    style = df.style.set_table_styles([{'selector': '.data', 'props': [('text-align', 'center')]},
+                                       {'selector': '.col_heading', 'props': [('text-align', 'center')]},
+                                       {'selector': '.col7', 'props': [('border-left',"2px solid black")]}])
     style = style.applymap(lambda v: 'border: 1px solid black', subset=subset)
     style = style.applymap(color_shift, factory=factory, subset=subset)  # color cells
     return style
 
-
 def color_shift(shift, factory):
-    cmap = list(mcolors.TABLEAU_COLORS.values())
-    #     cmap = ["yellow", "blue","red", "orange", "cyan"]
+    # cmap = ["yellow", "blue","red", "orange", "cyan"]
+    cmap = plt.get_cmap("Set3") # https://matplotlib.org/2.0.2/examples/color/colormaps_reference.html
     if shift is None or shift == '':
         return 'background-color: white'
-    return f"background-color: {cmap[factory.shift_name_to_idx[shift]]}"
+    # return f"background-color: {cmap(factory.shift_name_to_idx[shift])}"
+    r,g,b = (round(255*val) for val in cmap.colors[factory.shift_name_to_idx[shift]])
+    return f"background-color: rgb({r},{g},{b})"
 
 
 def highlight_cell(cells, factory):
     def do_function(x):
-        return [f'background: {cells[(x.name, i)]}'
-                if (x.name, i) in cells else "" for i, _ in enumerate(x)]
-
+        styles = []
+        for i, _ in enumerate(x):
+            txt = ""
+            if (x.name, i) in cells:
+                color = cells[(x.name, i)]
+                txt = "background: "
+                if isinstance(color, tuple): # rgb/rgba values
+                    if len(color) == 3:
+                        txt += f"rgb{color}"
+                    elif len(color) == 4:
+                        txt += f"rgba{color}"
+                    else:
+                        raise ValueError(f"Unknown color value {color}")
+                else:
+                    txt += color
+            styles.append(txt)
+        return styles
     return do_function
 
 
@@ -76,22 +93,25 @@ def highlight_cover(covers, factory):
     return do_function
 
 
-def highlight_row(nurse_id, windows, factory):
+def highlight_row(nurse_id, work_windows, factory):
     nurses = factory.data.staff['name'].tolist()
+
 
     def do_function(x):
         borders = []
-        for id, window in zip(nurse_id, windows):
-            for i, _ in enumerate(x):
-                s = ''
-                if i in window:
-                    if x.name == nurses[id]:
-                        s = 'border-top: 5px solid red; border-bottom:5px solid red;'
-                        if i == window[0]:
-                            s += 'border-left: 5px solid red;'
-                        if i == window[-1]:
-                            s += 'border-right: 5px solid red;'
-                borders += [s]
+
+        if x.name not in nurses: return [''] * len(x)
+        n_id = nurses.index(x.name)
+        windows = [win for n,win in zip(nurse_id, work_windows) if n == n_id]
+        for i, _ in enumerate(x):
+            s = ''
+            if any(i in w for w in windows):
+                s = 'border-top: 5px solid red; border-bottom:5px solid red;'
+                if any(i == w[0] for w in windows):
+                    s += 'border-left: 5px solid red;'
+                if any(i == w[-1] for w in windows):
+                    s += 'border-right: 5px solid red;'
+            borders += [s]
         return borders
 
     return do_function
@@ -102,17 +122,17 @@ def highlight_weekends(nurse_id, factory):
 
     def do_function(x):
         borders = []
-        for id in nurse_id:
-            for i, _ in enumerate(x):
-                s = ''
-                if i % 7 in [5, 6]:
-                    if x.name == nurses[id]:
-                        s = 'border-top: 5px solid indigo; border-bottom:5px solid indigo;'
-                        if i % 7 == 5:
-                            s += 'border-left: 5px solid indigo;'
-                        if i % 7 == 6:
-                            s += 'border-right: 5px solid indigo;'
-                borders += [s]
+        names = [nurses[id] for id in nurse_id]
+        for i, _ in enumerate(x):
+            s = ''
+            if i % 7 in [5, 6]:
+                if x.name in names:
+                    s = 'border-top: 5px solid indigo; border-bottom:5px solid indigo;'
+                    if i % 7 == 5:
+                        s += 'border-left: 5px solid indigo;'
+                    if i % 7 == 6:
+                        s += 'border-right: 5px solid indigo;'
+            borders += [s]
         return borders
 
     return do_function
