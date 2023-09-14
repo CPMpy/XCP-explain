@@ -65,8 +65,7 @@ class NurseSchedulingFactory:
         model += self.shift_on_request_decision()
         model += self.shift_off_request_decision()
         model += self.cover_slack()
-        model.minimize(self.slack.max())
-
+        model.minimize(abs(self.slack).max())
 
         return model, vars, self.slack
 
@@ -344,7 +343,6 @@ class NurseSchedulingFactory:
             # get all constraints of this type
             constraints = []
             for n, nurse in self.data.staff.iterrows():
-                constraints.append(self.min_consecutive_off_automaton(nurse_id=n, min_days=nurse["MinConsecutiveDaysOff"]))
                 constraints.append(
                     self.min_consecutive_off_automaton(nurse_id=n, min_days=nurse["MinConsecutiveDaysOff"]))
             return constraints
@@ -447,7 +445,6 @@ class NurseSchedulingFactory:
             assert is_not_none(shift, requirement)
             nb_nurses = cp.Count(self.nurse_view[:, day], shift)
             expr = nb_nurses == requirement
-            expr.set_description(f"Shift {self.idx_to_name[shift]} on {self.days[day]} must be covered by {requirement} nurses out of {len(self.nurse_view[:, day])}")
             expr.set_description(
                 f"Shift {self.idx_to_name[shift]} on {self.days[day]} must be covered by {requirement} nurses out of {len(self.nurse_view[:, day])}")
             expr.cover = day
