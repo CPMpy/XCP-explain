@@ -22,6 +22,11 @@ class NurseSchedulingFactory:
         self.nurse_view = cp.intvar(0, self.n_types, shape=(self.n_nurses, data.horizon), name="roster")
         self.slack = cp.intvar(-self.n_nurses, self.n_nurses, shape=data.horizon, name="slack")
 
+        # some visualization stuff
+        self.day_off_color = "lightgreen"
+        self.on_request_color = (183,119,41)  # copper-ish
+        self.off_request_color = (212,175,55) # gold-ish
+
     def get_full_model(self):
 
         model = cp.Model()
@@ -297,8 +302,8 @@ class NurseSchedulingFactory:
         constraints = []
         for n, (_, days) in enumerate(self.data.days_off.iterrows()):
             cons = cp.sum([self.nurse_view[n, days["DayIdx"]]]) == 0
-            cons.set_description(f"{self.data.staff.iloc[n]['name']} should not work on {self.days[days['DayIdx']]}")
-            cons.cell = (self.data.staff.iloc[n]['name'], days["DayIdx"], "cyan")
+            cons.set_description(f"{self.data.staff.iloc[n]['name']} has a day off on {self.days[days['DayIdx']]}")
+            cons.cell = (self.data.staff.iloc[n]['name'], days["DayIdx"], self.day_off_color)
             constraints.append(cons)
         return constraints
 
@@ -365,8 +370,9 @@ class NurseSchedulingFactory:
         if nurse_id is not None:
             assert day is not None and shift is not None
             expr = self.nurse_view[nurse_id, day] == shift
-            expr.set_description(f"{self.data.staff.iloc[nurse_id]['name']} requests to work shift {self.idx_to_name[shift]} on {self.days[day]}")
-            expr.cell = (self.data.staff.iloc[nurse_id]['name'], day, 'lightsalmon')
+            expr.set_description(
+                f"{self.data.staff.iloc[nurse_id]['name']} requests to work shift {self.idx_to_name[shift]} on {self.days[day]}")
+            expr.cell = (self.data.staff.iloc[nurse_id]['name'], day, self.on_request_color)
             return expr
         else:
             # all constraints of this type
@@ -408,8 +414,9 @@ class NurseSchedulingFactory:
         if nurse_id is not None:
             assert day is not None and shift is not None
             expr = self.nurse_view[nurse_id, day] != shift
-            expr.set_description(f"{self.data.staff.iloc[nurse_id]['name']} requests to not work shift {self.idx_to_name[shift]} on {self.days[day]}")
-            expr.cell = (self.data.staff.iloc[nurse_id]['name'], day, 'cyan')
+            expr.set_description(
+                f"{self.data.staff.iloc[nurse_id]['name']} requests to not work shift {self.idx_to_name[shift]} on {self.days[day]}")
+            expr.cell = (self.data.staff.iloc[nurse_id]['name'], day, self.off_request_color)
             return expr
         else:
             # all constraints of this type
