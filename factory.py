@@ -1,9 +1,5 @@
-from dataclasses import dataclass
 from read_data import SchedulingProblem
-import pandas as pd
 import cpmpy as cp
-from cpmpy.expressions.core import Expression
-
 
 class NurseSchedulingFactory:
 
@@ -15,9 +11,9 @@ class NurseSchedulingFactory:
         self.weekends = [(i - 1, i) for i in range(data.horizon) if i != 0 and (i + 1) % 7 == 0]
         self.shift_name_to_idx = {name: idx + 1 for idx, (name, _) in enumerate(data.shifts.iterrows())}
         self.idx_to_name = ["F"] + [key for key in self.shift_name_to_idx]
-        self.shift_name_to_idx.update({"F":0})
+        self.shift_name_to_idx.update({"F": 0})
         weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        self.days = [f"{weekdays[i % 7]} {1+(i // 7)}" for i in range(data.horizon)]
+        self.days = [f"{weekdays[i % 7]} {1 + (i // 7)}" for i in range(data.horizon)]
         # decision vars
         self.nurse_view = cp.intvar(0, self.n_types, shape=(self.n_nurses, data.horizon), name="roster")
         self.slack = cp.intvar(-self.n_nurses, self.n_nurses, shape=data.horizon, name="slack")
@@ -48,15 +44,6 @@ class NurseSchedulingFactory:
         obj_func += self.cover_penalty()
 
         model.minimize(obj_func)
-        # # add solution
-        # model += self.nurse_view == [[0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1],
-        #                              [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0],
-        #                              [1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0],
-        #                              [1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
-        #                              [0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1],
-        #                              [1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1],
-        #                              [0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1],
-        #                              [1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0]]
 
         return model, self.nurse_view
 
@@ -71,7 +58,6 @@ class NurseSchedulingFactory:
 
         return model, vars
 
-
     def get_slack_model(self):
 
         model, vars = self.get_full_model()
@@ -83,7 +69,6 @@ class NurseSchedulingFactory:
 
 
         return model, vars, self.slack
-
 
     def shift_rotation(self):
         """
@@ -120,7 +105,8 @@ class NurseSchedulingFactory:
             for n, nurse in self.data.staff.iterrows():
                 for t, (shift_id, shift) in enumerate(self.data.shifts.iterrows()):
                     constraints.append(
-                        self.max_shifts(nurse_idx=n, shift_id=self.shift_name_to_idx[shift_id], max_shifts=nurse[shift_id])
+                        self.max_shifts(nurse_idx=n, shift_id=self.shift_name_to_idx[shift_id],
+                                        max_shifts=nurse[shift_id])
                     )
             return constraints
 
@@ -172,13 +158,13 @@ class NurseSchedulingFactory:
             assert max_days is not None
             nurse = self.data.staff.iloc[nurse_id]
             constraints = []
-            for i in range(self.data.horizon-max_days):
-                window = self.nurse_view[nurse_id][i:i+max_days+1]
+            for i in range(self.data.horizon - max_days):
+                window = self.nurse_view[nurse_id][i:i + max_days + 1]
                 assert len(window) == max_days + 1
                 cons = (cp.Count(window, 0) >= 1)
                 cons.set_description(f"{nurse['name']} can work at most {max_days} days before having a day off")
                 cons.nurse_id = nurse_id
-                cons.window = range(i, i+max_days+1)
+                cons.window = range(i, i + max_days + 1)
                 constraints.append(cons)
             return constraints
         else:
@@ -216,7 +202,6 @@ class NurseSchedulingFactory:
                 constraints.append(self.max_consecutive_automaton(nurse_id=n, max_days=max_days))
             return constraints
 
-
     def min_consecutive(self, nurse_id=None, min_days=None):
         """
             The minimum number of shifts that must be worked before having a day off.
@@ -230,7 +215,7 @@ class NurseSchedulingFactory:
             nurse_shifts = self.nurse_view[nurse_id]
             for i, shift in enumerate(nurse_shifts):
                 surrounding_shifts = [
-                    nurse_shifts[max(i-min_days+1+j,0):i+j+1] for j in range(min_days)
+                    nurse_shifts[max(i - min_days + 1 + j, 0):i + j + 1] for j in range(min_days)
                 ]
                 cons &= (shift != 0).implies(cp.any(cp.Count(window, 0) == 0 for window in surrounding_shifts))
 
@@ -273,7 +258,6 @@ class NurseSchedulingFactory:
                 constraints.append(self.min_consecutive_automaton(nurse_id=n, min_days=min_days))
             return constraints
 
-
     def weekend_shifts(self, nurse_id=None, max_weekends=None):
         """
             Max nb of working weekends for each nurse.
@@ -307,7 +291,6 @@ class NurseSchedulingFactory:
             constraints.append(cons)
         return constraints
 
-
     def min_consecutive_off(self, nurse_id=None, min_days=None):
         """
         The minimum number of consecutive days off that must be assigned before assigning a shift.
@@ -323,7 +306,8 @@ class NurseSchedulingFactory:
                 surrounding_shifts = [
                     nurse_shifts[max(i - min_days + 1 + j, 0):i + j + 1] for j in range(min_days)
                 ]
-                cons &= (shift == 0).implies(cp.any(cp.sum((s != 0) for s in window) == 0 for window in surrounding_shifts))
+                cons &= (shift == 0).implies(
+                    cp.any(cp.sum((s != 0) for s in window) == 0 for window in surrounding_shifts))
 
             cons.set_description(f"{nurse['name']} should have at least {min_days} off consecutively")
             return cons
@@ -344,16 +328,16 @@ class NurseSchedulingFactory:
             assert min_days is not None
             nurse = self.data.staff.iloc[nurse_id]
 
-            trans_func = [(0, s+1,0) for s in range(self.n_types)] # state 0 is working state
-            trans_func += [(i, 0, i+1) for i in range(min_days)] # counting states
-            trans_func += [(min_days, 0, min_days)] # "had enough free days" state
-            trans_func += [(min_days, s+1,0) for s in range(self.n_types)] # return to working state
+            trans_func = [(0, s + 1, 0) for s in range(self.n_types)]  # state 0 is working state
+            trans_func += [(i, 0, i + 1) for i in range(min_days)]  # counting states
+            trans_func += [(min_days, 0, min_days)]  # "had enough free days" state
+            trans_func += [(min_days, s + 1, 0) for s in range(self.n_types)]  # return to working state
             cons = cp.DirectConstraint("AddAutomaton",
-                                         (self.nurse_view[nurse_id],
-                                          min_days,
-                                          list(range(0, min_days + 1)),
-                                          trans_func),
-                                         novar=(1, 2, 3))
+                                       (self.nurse_view[nurse_id],
+                                        min_days,
+                                        list(range(0, min_days + 1)),
+                                        trans_func),
+                                       novar=(1, 2, 3))
             cons.set_description(f"{nurse['name']} should have at least {min_days} off consecutively")
             return cons
         else:
@@ -361,6 +345,8 @@ class NurseSchedulingFactory:
             constraints = []
             for n, nurse in self.data.staff.iterrows():
                 constraints.append(self.min_consecutive_off_automaton(nurse_id=n, min_days=nurse["MinConsecutiveDaysOff"]))
+                constraints.append(
+                    self.min_consecutive_off_automaton(nurse_id=n, min_days=nurse["MinConsecutiveDaysOff"]))
             return constraints
 
     def shift_on_request_decision(self, nurse_id=None, day=None, shift=None):
@@ -368,7 +354,7 @@ class NurseSchedulingFactory:
             The specified shift is assigned to the specified employee on the specified day
         """
         if nurse_id is not None:
-            assert day is not None and shift is not None
+            assert is_not_none(day, shift)
             expr = self.nurse_view[nurse_id, day] == shift
             expr.set_description(
                 f"{self.data.staff.iloc[nurse_id]['name']} requests to work shift {self.idx_to_name[shift]} on {self.days[day]}")
@@ -391,11 +377,11 @@ class NurseSchedulingFactory:
                 then the solution's penalty is the specified weight value.
         """
         if nurse_id is not None:
-            assert day is not None and shift is not None and weight is not None
-            assignment = self.nurse_view[nurse_id, day] != shift
-            assignment.set_description(f"{self.data.staff.iloc[nurse_id]['name']} requests to work shift {self.idx_to_name[shift]} on {self.days[day]}")
+            assert is_not_none(day, shift, weight)
+            assignment = ~(self.nurse_view[nurse_id, day] == shift)
+            assignment.set_description(
+                f"{self.data.staff.iloc[nurse_id]['name']} requests to work shift {self.idx_to_name[shift]} on {self.days[day]}")
             return weight * assignment
-            return expr
         else:
             # sum of all requests
             penalties = []
@@ -412,7 +398,7 @@ class NurseSchedulingFactory:
             The specified shift is assigned to the specified employee on the specified day
         """
         if nurse_id is not None:
-            assert day is not None and shift is not None
+            assert is_not_none(day, shift)
             expr = self.nurse_view[nurse_id, day] != shift
             expr.set_description(
                 f"{self.data.staff.iloc[nurse_id]['name']} requests to not work shift {self.idx_to_name[shift]} on {self.days[day]}")
@@ -435,9 +421,10 @@ class NurseSchedulingFactory:
                 then the solution's penalty is the weight value.
         """
         if nurse_id is not None:
-            assert day is not None and shift is not None and weight is not None
-            assignment = (self.nurse_view[nurse_id, day] == shift)
-            assignment.set_description(f"{self.data.staff.iloc[nurse_id]['name']} requests to not work shift {self.idx_to_name[shift]} on {self.days[day]}")
+            assert is_not_none(day, shift, weight)
+            assignment = ~(self.nurse_view[nurse_id, day] != shift)
+            assignment.set_description(
+                f"{self.data.staff.iloc[nurse_id]['name']} requests to not work shift {self.idx_to_name[shift]} on {self.days[day]}")
             return weight * assignment
         else:
             # sum of all requests
@@ -448,7 +435,7 @@ class NurseSchedulingFactory:
                 penalties.append(
                     self.shift_off_requests(nurse_id=n, day=request["Day"], shift=shift, weight=request["Weight"])
                 )
-            return cp.sum(penalties)
+            return penalties
 
     def cover_decision(self, day=None, shift=None, requirement=None):
         """
@@ -457,10 +444,12 @@ class NurseSchedulingFactory:
         For the purposes of this tutorial, we implement it as a hard constraint
         """
         if day is not None:
-            assert shift is not None and requirement is not None
+            assert is_not_none(shift, requirement)
             nb_nurses = cp.Count(self.nurse_view[:, day], shift)
             expr = nb_nurses == requirement
             expr.set_description(f"Shift {self.idx_to_name[shift]} on {self.days[day]} must be covered by {requirement} nurses out of {len(self.nurse_view[:, day])}")
+            expr.set_description(
+                f"Shift {self.idx_to_name[shift]} on {self.days[day]} must be covered by {requirement} nurses out of {len(self.nurse_view[:, day])}")
             expr.cover = day
             return expr
 
@@ -482,11 +471,12 @@ class NurseSchedulingFactory:
         For the purposes of this tutorial, we implement it as a hard constraint using a slack variable
         """
         if day is not None:
-            assert shift is not None and requirement is not None
+            assert is_not_none(shift, requirement)
             nb_nurses = cp.Count(self.nurse_view[:, day], shift)
-            expr = nb_nurses == requirement-self.slack[day]
-            expr &= self.slack[day] == requirement-nb_nurses
-            expr.set_description(f"Shift {self.idx_to_name[shift]} on {self.days[day]} must be covered by {requirement} nurses out of {len(self.nurse_view[:, day])}")
+            expr = nb_nurses == requirement - self.slack[day]
+            expr &= self.slack[day] == requirement - nb_nurses
+            expr.set_description(
+                f"Shift {self.idx_to_name[shift]} on {self.days[day]} must be covered by {requirement} nurses out of {len(self.nurse_view[:, day])}")
             expr.cover = day
             return expr
         else:
@@ -510,13 +500,14 @@ class NurseSchedulingFactory:
             (requirement - x) * weight for under
         """
         if day is not None:
-            assert shift is not None and requirement is not None and weight_over is not None and weight_under is not None
+            assert is_not_none(shift, requirement, weight_over, weight_under)
             nb_nurses = cp.Count(self.nurse_view[:, day], shift)
             penalty_over = weight_over * (nb_nurses - requirement)
             penalty_under = weight_under * (requirement - nb_nurses)
             # assumption: weights are positive!
             expr = cp.max([penalty_under, penalty_over])
-            expr.set_description(f"Shift {self.idx_to_name[shift]} on {self.days[day]} must be covered by {requirement} nurses out of {len(self.nurse_view[:, day])}")
+            expr.set_description(
+                f"Shift {self.idx_to_name[shift]} on {self.days[day]} must be covered by {requirement} nurses out of {len(self.nurse_view[:, day])}")
             expr.cover = day
             return expr
 
@@ -524,10 +515,18 @@ class NurseSchedulingFactory:
             penalties = []
             for _, cover in self.data.cover.iterrows():
                 penalties.append(self.cover_penalty(
-                    day = cover["# Day"],
-                    shift= self.shift_name_to_idx[cover["ShiftID"]],
-                    requirement = cover["Requirement"],
-                    weight_over = cover["Weight for over"],
-                    weight_under = cover["Weight for under"]
+                    day=cover["# Day"],
+                    shift=self.shift_name_to_idx[cover["ShiftID"]],
+                    requirement=cover["Requirement"],
+                    weight_over=cover["Weight for over"],
+                    weight_under=cover["Weight for under"]
                 ))
             return cp.sum(penalties)
+
+
+
+def is_not_none(*args):
+    if any(a is None for a in args):
+        return False
+    else:
+        return True
