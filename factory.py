@@ -65,7 +65,10 @@ class NurseSchedulingFactory:
         model += self.shift_on_request_decision()
         model += self.shift_off_request_decision()
         model += self.cover_slack()
-        model.minimize(abs(self.slack).max())
+
+        multi_obj = 10000 * abs(self.slack.max()) + cp.sum(abs(self.slack))
+        model.minimize(multi_obj)
+        # model.minimize(abs(self.slack).max())
 
         return model, vars, self.slack
 
