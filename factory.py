@@ -381,7 +381,7 @@ class NurseSchedulingFactory:
             assert is_not_none(day, shift, weight)
             assignment = ~(self.nurse_view[nurse_id, day] == shift)
             assignment.set_description(
-                f"{self.data.staff.iloc[nurse_id]['name']} requests to work shift {self.idx_to_name[shift]} on {self.days[day]}")
+                f"{self.data.staff.iloc[nurse_id]['name']}'s requests to work shift {self.idx_to_name[shift]} on {self.days[day]} is denied")
             return weight * assignment
         else:
             # sum of all requests
@@ -425,7 +425,7 @@ class NurseSchedulingFactory:
             assert is_not_none(day, shift, weight)
             assignment = ~(self.nurse_view[nurse_id, day] != shift)
             assignment.set_description(
-                f"{self.data.staff.iloc[nurse_id]['name']} requests to not work shift {self.idx_to_name[shift]} on {self.days[day]}")
+                f"{self.data.staff.iloc[nurse_id]['name']}'s requests to not work shift {self.idx_to_name[shift]} on {self.days[day]} is denied")
             return weight * assignment
         else:
             # sum of all requests
