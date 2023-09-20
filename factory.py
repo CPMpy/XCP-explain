@@ -1,3 +1,5 @@
+import numpy as np
+
 from read_data import SchedulingProblem
 import cpmpy as cp
 
@@ -16,7 +18,9 @@ class NurseSchedulingFactory:
         self.days = [f"{weekdays[i % 7]} {1 + (i // 7)}" for i in range(data.horizon)]
         # decision vars
         self.nurse_view = cp.intvar(0, self.n_types, shape=(self.n_nurses, data.horizon), name="roster")
-        self.slack = cp.intvar(-self.n_nurses, self.n_nurses, shape=data.horizon, name="slack")
+
+        self.slack_under = cp.intvar(0, self.n_nurses, shape=data.horizon, name="slack_under")
+        self.slack_over = cp.intvar(0, self.n_nurses, shape=data.horizon, name="slack_over")
 
         # some visualization stuff
         self.day_off_color = "lightgreen"
@@ -66,11 +70,12 @@ class NurseSchedulingFactory:
         model += self.shift_off_request_decision()
         model += self.cover_slack()
 
-        multi_obj = 10000 * abs(self.slack.max()) + cp.sum(abs(self.slack))
+        slack = cp.cpm_array(self.slack_under.tolist() + self.slack_over.tolist())
+        multi_obj = 10000 * slack.max() + cp.sum(slack)
         model.minimize(multi_obj)
         # model.minimize(abs(self.slack).max())
 
-        return model, vars, self.slack
+        return model, vars, self.slack_under, self.slack_over
 
     def shift_rotation(self):
         """
@@ -473,8 +478,9 @@ class NurseSchedulingFactory:
         if day is not None:
             assert is_not_none(shift, requirement)
             nb_nurses = cp.Count(self.nurse_view[:, day], shift)
-            expr = nb_nurses == requirement - self.slack[day]
-            expr &= self.slack[day] == requirement - nb_nurses
+            expr = nb_nurses == requirement - self.slack_under[day] + self.slack_over[day]
+            # expr &= self.slack_under[day] == requirement - nb_nurses
+            # expr &= self.slack_over[day] == requirement + nb_nurses
             expr.set_description(
                 f"Shift {self.idx_to_name[shift]} on {self.days[day]} must be covered by {requirement} nurses out of {len(self.nurse_view[:, day])}")
             expr.cover = day
