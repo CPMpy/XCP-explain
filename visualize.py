@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def visualize(sol, factory):
+def visualize(sol, factory, highlight_cover=False):
     weeks = [f"Week {i + 1}" for i in range(factory.data.horizon // 7)]
     weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     nurses = factory.data.staff['name'].tolist()
@@ -32,6 +32,18 @@ def visualize(sol, factory):
                                        {'selector': '.col7', 'props': [('border-left',"2px solid black")]}])
     style = style.map(lambda v: 'border: 1px solid black', subset=subset)
     style = style.map(color_shift, factory=factory, subset=subset)  # color cells
+
+    if highlight_cover is True:
+
+        def highlight(val):
+            fill, req = val.split('/')
+            if fill == req:
+                return ''
+            return 'color : red'
+
+        subset = (df.index.tolist()[-len(factory.data.shifts):], df.columns[:-1])
+        style = style.map(highlight, subset=subset)
+
     return style
 
 def color_shift(shift, factory):
