@@ -15,7 +15,7 @@ def visualize(sol, factory):
                       index=factory.data.staff.name)
 
     mapping = factory.idx_to_name
-    df = df.applymap(lambda v: mapping[v] if v is not None and v < len(mapping) else '')  # convert to shift names
+    df = df.map(lambda v: mapping[v] if v is not None and v < len(mapping) else '')  # convert to shift names
 
     for shift_type in factory.shift_name_to_idx:
         if shift_type == "F":
@@ -30,8 +30,8 @@ def visualize(sol, factory):
     style = df.style.set_table_styles([{'selector': '.data', 'props': [('text-align', 'center')]},
                                        {'selector': '.col_heading', 'props': [('text-align', 'center')]},
                                        {'selector': '.col7', 'props': [('border-left',"2px solid black")]}])
-    style = style.applymap(lambda v: 'border: 1px solid black', subset=subset)
-    style = style.applymap(color_shift, factory=factory, subset=subset)  # color cells
+    style = style.map(lambda v: 'border: 1px solid black', subset=subset)
+    style = style.map(color_shift, factory=factory, subset=subset)  # color cells
     return style
 
 def color_shift(shift, factory):

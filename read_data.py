@@ -39,7 +39,8 @@ def get_data(fname):
     problem = SchedulingProblem()
 
     problem.horizon = tag_to_data(string, "SECTION_HORIZON", skip_lines=2, datatype=int)
-    shifts = tag_to_data(string, "SECTION_SHIFTS", names=["ShiftID", "Length", "cannot follow"])
+    shifts = tag_to_data(string, "SECTION_SHIFTS", names=["ShiftID", "Length", "cannot follow"],
+                         dtype={'ShiftID':str, 'Length':int, 'cannot follow':str})
     shifts.fillna("", inplace=True)
     shifts["cannot follow"] = shifts["cannot follow"].apply(lambda val : val.split("|"))
     problem.shifts = shifts
