@@ -316,7 +316,7 @@ class NurseSchedulingFactory:
                 cons &= (shift == 0).implies(
                     cp.any(cp.sum((s != 0) for s in window) == 0 for window in surrounding_shifts))
 
-            cons.set_description(f"{nurse['name']} should have at least {min_days} off consecutively")
+            cons.set_description(f"{nurse['name']} should have at least {min_days} consecutive days off")
             return cons
         else:
             # get all constraints of this type
