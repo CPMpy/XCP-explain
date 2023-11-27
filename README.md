@@ -49,7 +49,8 @@ pip install cpmpy jupyter notebook rise faker pandas
 ├── hands-on-tutorial.ipynb        # Runnable version of the slides
 ├── hands-on-tutorial.slides.html  # .html version of the executed slides
 ├── img                            # Images used in the tutorial
-└── read_data.py                   # Helper functions to read and wrangle NSP data
+├── read_data.py                   # Helper functions to read and wrangle NSP data
+└── visualize.py                   # Helper functions for visualization of constraints and solutions
 ```
 
 ## References
