@@ -21,6 +21,7 @@ https://raw.githack.com/CPMpy/CP23-tutorial/main/hands-on-tutorial.slides.html#/
 ## How to run?
 
 To run the `.ipynb` yourself, makes sure you install the following packages:
+- CPMpy (>=v0.9.17)
 - jupyter
 - rise (to make the slideshow)
 - faker (to create fake names for nurses)
@@ -30,17 +31,7 @@ To run the `.ipynb` yourself, makes sure you install the following packages:
 A one-liner to install pip-packages:
 
 ```bash
-pip install jupyter notebook rise faker pandas
-```
-
-To use CPMpy with the custom branch:
-
-```bash
-cd yourfavoritedir
-git clone https://github.com/CPMpy/cpmpy.git
-cd cpmpy
-git checkout constraint_name
-pip install -e .
+pip install cpmpy jupyter notebook rise faker pandas
 ```
 
 ## Structure of the repository
