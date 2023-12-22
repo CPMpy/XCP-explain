@@ -11,6 +11,9 @@ Driven by the use-case of nurse scheduling, we demonstrate the type of questions
 We cover classical methods such as MUS/MCS extraction, and more recent advances in the field such as step-wise explanations, constraint relaxation methods, and counterfactual solutions.
 We demonstrate and give special attention to techniques that we have successfully (re-)implemented on top of the CPMpy constraint-solving library, which can be readily used today.
 
+The video of the presentation is made available here:
+[![Link to tutorial](img/tutorial_thumbnail.png)](https://www.youtube.com/watch?v=V9DPHZq0gXk)
+
 ## Just browsing?
 
 We uploaded the executed version of the slides in both `.pdf` and `.html` versions.
@@ -31,7 +34,7 @@ To run the `.ipynb` yourself, makes sure you install the following packages:
 A one-liner to install pip-packages:
 
 ```bash
-pip install cpmpy jupyter notebook rise faker pandas
+pip install cpmpy jupyter nbclassic rise faker pandas matplotlib
 ```
 
 ## Structure of the repository
