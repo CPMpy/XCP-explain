@@ -29,6 +29,7 @@ To run the `.ipynb` yourself, makes sure you install the following packages:
 - rise (to make the slideshow)
 - faker (to create fake names for nurses)
 - pandas (for visualizations)
+- matplotlib (for visualizations)
 
 A one-liner to install pip-packages:
 
