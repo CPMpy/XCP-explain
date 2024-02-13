@@ -24,17 +24,23 @@ https://raw.githack.com/CPMpy/CP23-tutorial/main/hands-on-tutorial.slides.html#/
 ## How to run?
 
 To run the `.ipynb` yourself, makes sure you install the following packages:
-- CPMpy (>=v0.9.17)
+- CPMpy (>= v0.9.17)
 - jupyter
 - rise (to make the slideshow)
 - faker (to create fake names for nurses)
 - pandas (for visualizations)
-- cpmpy on branch `constraint_name` for the descriptions of the constraints (this feature will soon be available in the pip version of CPMpy)
 
 A one-liner to install pip-packages:
 
 ```bash
 pip install cpmpy jupyter nbclassic rise faker pandas matplotlib
+```
+
+Optionally, you can install the `Gurobi` MIP solver and the `Exact` ILP solver for better performance of algorithms relying on incremental solving:
+Note that for Gurobi, you will need a license in order to make full use of its power.
+
+```bash
+pip install gurobipy exact
 ```
 
 ## Structure of the repository
