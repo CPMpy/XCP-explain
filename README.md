@@ -1,4 +1,5 @@
 # Explainable Constraint Solving - A Hands-On Tutorial
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10694140.svg)](https://doi.org/10.5281/zenodo.10694140)
 
 ### Authored by Ignace Bleukx, Dimos Tsouros and Tias Guns
 
