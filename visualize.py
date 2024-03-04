@@ -15,7 +15,7 @@ def visualize(sol, factory, highlight_cover=False):
                       index=factory.data.staff.name)
 
     mapping = factory.idx_to_name
-    df = df.map(lambda v: mapping[v] if v is not None and v < len(mapping) else '')  # convert to shift names
+    df = df.applymap(lambda v: mapping[v] if v is not None and v < len(mapping) else '')  # convert to shift names
 
     for shift_type in factory.shift_name_to_idx:
         if shift_type == "F":
@@ -27,11 +27,13 @@ def visualize(sol, factory, highlight_cover=False):
     df["Total shifts"] = (df != "F").sum(axis=1)  # shifts done by nurse
 
     subset = (df.index.tolist()[:-len(factory.data.shifts)], df.columns[:-1])
-    style = df.style.set_table_styles([{'selector': '.data', 'props': [('text-align', 'center')]},
+    styler = df.style\
+        .applymap(lambda v: 'border: 1px solid black', subset=subset)\
+        .applymap(color_shift, factory=factory, subset=subset) \
+        .set_table_styles([{'selector': '.data', 'props': [('text-align', 'center')]},
                                        {'selector': '.col_heading', 'props': [('text-align', 'center')]},
-                                       {'selector': '.col7', 'props': [('border-left',"2px solid black")]}])
-    style = style.map(lambda v: 'border: 1px solid black', subset=subset)
-    style = style.map(color_shift, factory=factory, subset=subset)  # color cells
+                                       {'selector': '.col7', 'props': [('border-left',"2px solid black")]}
+                                       ])
 
     if highlight_cover is True:
 
@@ -42,10 +44,10 @@ def visualize(sol, factory, highlight_cover=False):
             return 'color : red'
 
         subset = (df.index.tolist()[-len(factory.data.shifts):], df.columns[:-1])
-        style = style.map(highlight, subset=subset)
-
-    return style
-
+        styler = styler.applymap(highlight, subset=subset)
+    styler
+    
+    return styler
 def color_shift(shift, factory):
     # cmap = ["yellow", "blue","red", "orange", "cyan"]
     cmap = plt.get_cmap("Set3") # https://matplotlib.org/2.0.2/examples/color/colormaps_reference.html
