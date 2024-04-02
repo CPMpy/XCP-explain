@@ -139,3 +139,6 @@ def ocus_oneof(soft, hard=[], oneof_idxes=[], weights=1, solver="ortools", hs_so
 
 def smus(soft, hard=[], weights=1, solver="ortools", hs_solver="gurobi"):
     return ocus_oneof(soft, hard, [], weights, solver, hs_solver)
+
+def omus(soft, hard=[], weights=1, solver="ortools", hs_solver="gurobi"):
+    return ocus_oneof(soft, hard, [], weights, solver, hs_solver)

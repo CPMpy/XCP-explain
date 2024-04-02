@@ -47,7 +47,7 @@ def smallest_next_step(domains, constraints, propagator, time_limit=3600):
 
     start_time = time()
 
-    random.shuffle(constraints)
+    sorted(constraints, key=lambda x: str(x))
     candidates = []
     for size in range(1,len(constraints)+1):
         logging.info(f"Propagating constraint sets of size {size}")
@@ -121,7 +121,8 @@ def construct_greedy(constraints, goal_reduction, time_limit, seed):
 
     # max_propagator = ExactPropagate(constraints=constraints, caching=False)
     # max_propagator = CPPropagate(constraints=constraints, caching=False)
-    max_propagator = MaximalPropagateSolveAll(constraints=constraints, caching=True)
+    #max_propagator = MaximalPropagateSolveAll(constraints=constraints, caching=True)
+    max_propagator = MaximalPropagate(constraints=constraints, caching=True)
 
     domains = DomainSet({var : frozenset(range(var.lb, var.ub+1)) for var in get_variables(constraints)})
     seq = [Step(domains, [], domains, type="max", guided=False)]
