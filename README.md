@@ -1,73 +1,24 @@
 # Explainable Constraint Solving - A Hands-On Tutorial
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10694140.svg)](https://doi.org/10.5281/zenodo.10694140)
 
 ### Authored by Ignace Bleukx, Dimos Tsouros and Tias Guns
 
-This repository contains the code and runnable notebook for our Explainable Constraint Solving tutorials and talks. 
+Tutorial at the 26th European Conference on Artificial Intelligence (ECAI 2024)
 
-Explainable constraint solving is a sub-field of explainable AI (XAI) concerned with explaining constraint (optimization) problems. 
-Although constraint models are explicit: they are written down in terms of individual constraints that need to be satisfied, and the solution to such models can be non-trivial to understand.
+### Tutorial date and time
+Saturday, 19 October 2024, 14:00
 
-Driven by the use-case of nurse scheduling, we demonstrate the type of questions a user can have about (non)-solutions, as well as reviewing what kind of computational tools are available today to answer such questions. 
-We cover classical methods such as MUS/MCS extraction, and more recent advances in the field such as step-wise explanations, constraint relaxation methods, and counterfactual solutions.
-We demonstrate and give special attention to techniques that we have successfully (re-)implemented on top of the CPMpy constraint-solving library, which can be readily used today.
+### Abstract
+Explainable constraint solving is concerned with *explaining* constraint (optimization) problems and their solutions. While having roots in the well-studied topic of explaining unsatisfiability, it is getting renewed attention as part of the wider eXplainable AI (XAI) field. 
+This raises new challenges in terms of interpretability and actionability of explanations, as well as algorithmic challenges with regard to scalability, expressivity, and preferences that must be considered.
 
-The following presentations are available:
+We recognise two general types of explanations in XCP: deductive and contrastive explanations. 
+We provide a deeper view of techniques in these categories, including well-established techniques like minimal unsatisfiable subsets and correction subsets, as well as newer approaches such as step-wise explanations, feasibility corrections, inverse optimization techniques, and more. 
+The tutorial will be hands-on, being supported by working implementations on top of the CPMpy library. 
+All techniques will be showcased using live demo's and hands-on experimentation on nurse rostering problems in Python notebooks. 
+This tutorial includes an introduction to constraint solving as well as general XAI, so no previous knowledge is required.
 
-* ACP 2024 Winter School lecture: [Notebook](https://github.com/CPMpy/XCP-explain/blob/main/acp24-sumschool-xcp.ipynb) [PDF slides](https://github.com/CPMpy/XCP-explain/blob/main/acp24-sumschool-xcp.slides.pdf) [YouTube video](https://youtu.be/nGr4lbgRvzw)
-* CP 2023 tutorial: [Notebook](https://github.com/CPMpy/XCP-explain/blob/main/hands-on-tutorial.ipynb) [HTML slides](https://raw.githack.com/CPMpy/CP23-tutorial/main/hands-on-tutorial.slides.html#/1) [PDF slides](https://github.com/CPMpy/XCP-explain/blob/main/hands-on-tutorial%20slides.pdf) [YouTube video](https://www.youtube.com/watch?v=V9DPHZq0gXk)
+### Tutorial Repository
+The following repository contains the code and runnable notebook for our Explainable Constraint Solving tutorials and talks: https://github.com/CPMpy/XCP-explain
 
-The slide-show can be viewed from browser by opening the HTML version and using `Space` to go to the next slide.
 
-Here is the tutorial video for convenience:
-[![YouTube video](img/tutorial_thumbnail.png)](https://www.youtube.com/watch?v=V9DPHZq0gXk)
 
-## How to run the notebooks?
-
-To run the `.ipynb` yourself, makes sure you install the following packages:
-- CPMpy (>= v0.9.17)
-- jupyter
-- rise (to make the slideshow)
-- faker (to create fake names for nurses)
-- pandas (for visualizations)
-- matplotlib (for visualizations)
-
-A one-liner to install pip-packages:
-
-```bash
-pip install cpmpy jupyter nbclassic rise faker pandas matplotlib
-```
-
-Optionally, you can install the `Gurobi` MIP solver and the `Exact` ILP solver for better performance of algorithms relying on incremental solving:
-Note that for Gurobi, you will need a license in order to make full use of its power.
-
-```bash
-pip install gurobipy exact
-```
-
-## Structure of the repository
-```bash
-.
-├── Benchmarks                     # Nurse scheduling instances
-├── explanations
-│   ├── __init__.py
-│   ├── counterfactual.py          # Counterfactual explanations [1]
-│   ├── marco_mcs_mus.py           # MARCO enumeration algorithm [2]
-│   ├── stepwise                   # Fork of the step-wise explanations repo [3]
-│   └── subset.py                  # Code to find all kinds of subsets of constraints
-├── factory.py                     # Wrapper for nsp
-├── hands-on-tutorial slides.pdf   # Exectued version of the slides
-├── hands-on-tutorial.ipynb        # Runnable version of the slides
-├── hands-on-tutorial.slides.html  # .html version of the executed slides
-├── img                            # Images used in the tutorial
-├── read_data.py                   # Helper functions to read and wrangle NSP data
-└── visualize.py                   # Helper functions for visualization of constraints and solutions
-```
-
-## References
-
-> [1] Korikov, A., & Beck, J. C. (2021). Counterfactual explanations via inverse constraint programming. In 27th International Conference on Principles and Practice of Constraint Programming (CP 2021). Schloss Dagstuhl-Leibniz-Zentrum für Informatik.
-
-> [2] Liffiton, M.H., & Malik, A. (2013). Enumerating infeasibility: Finding multiple MUSes quickly. In Proceedings of the 10th International Conference on Integration of AI and OR Techniques in Constraint Programming (CPAIOR 2013) (pp. 160–175)
-
-> [3] Bleukx, I., Devriendt, J., Gamba, E., Bogaerts B., & Guns T. (2023). Simplifying Step-wise Explanation Sequences. In International Conference on Principles and Practice of Constraint Programming 2023
