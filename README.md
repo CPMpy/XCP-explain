@@ -21,4 +21,8 @@ This tutorial includes an introduction to constraint solving as well as general 
 The following repository contains the code and runnable notebook for our Explainable Constraint Solving tutorials and talks: [https://github.com/CPMpy/XCP-explain](https://github.com/CPMpy/XCP-explain)
 
 
-![](https://erc.europa.eu/sites/default/files/LOGO_ERC-FLAG_EU_.jpg)![](https://people.cs.kuleuven.be/~tias.guns/chat-opt.png)
+<p float="left">
+  <img src="https://erc.europa.eu/sites/default/files/LOGO_ERC-FLAG_EU_.jpg" width="200" />
+  <img src="https://people.cs.kuleuven.be/~tias.guns/chat-opt.png" width="200" />
+  <img src="https://b2969342.smushcdn.com/2969342/wp-content/uploads/2022/12/logotuples-white-1.png?lossy=1&strip=1&webp=1" width="200" />
+</p>
