@@ -5,7 +5,7 @@
 Tutorial at the [26th European Conference on Artificial Intelligence (ECAI 2024)](https://www.ecai2024.eu/)
 
 ### Tutorial date and time
-Saturday, 19 October 2024, 14:00
+Saturday, 19 October 2024, 14:00, Room: TBA
 
 ### Abstract
 Explainable constraint solving is concerned with *explaining* constraint (optimization) problems and their solutions. While having roots in the well-studied topic of explaining unsatisfiability, it is getting renewed attention as part of the wider eXplainable AI (XAI) field. 
@@ -39,8 +39,12 @@ This tutorial includes an introduction to constraint solving as well as general 
 The following repository contains the code and runnable notebook for our Explainable Constraint Solving tutorials and talks: [https://github.com/CPMpy/XCP-explain](https://github.com/CPMpy/XCP-explain)
 
 
+### Funded by
 <p float="left">
+  <a href="https://wms.cs.kuleuven.be/chat-opt">
   <img src="https://erc.europa.eu/sites/default/files/LOGO_ERC-FLAG_EU_.jpg" width="200" />
-  <img src="https://people.cs.kuleuven.be/~tias.guns/chat-opt.png" width="200" />
+  </a>
+  <a href="https://tuples.ai/">
   <img src="https://tuples.ai/wp-content/uploads/2022/12/logotuples.png" width="200" />
+  </a>
 </p>
