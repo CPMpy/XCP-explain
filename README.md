@@ -17,6 +17,18 @@ The tutorial will be hands-on, being supported by working implementations on top
 All techniques will be showcased using live demo's and hands-on experimentation on nurse rostering problems in Python notebooks. 
 This tutorial includes an introduction to constraint solving as well as general XAI, so no previous knowledge is required.
 
+### Presenters
+
+| ![Ignace Bleukx](https://cp2023.a4cp.org/images/speakers/ignace_cropped.jpg) | **Ignace Bleukx** is a 3rd year PhD student at KU Leuven and a key developer of the CPMpy library which he presented in a tutorial at IJCAI 2022. His PhD centers around explainable constraint solving with a special interest in explaining optimization problems. |
+|:----------------------------------------------------------------------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+| ![Dimos Tsouros](https://dimostsouros.github.io/images/picture_tsouros2.png) | **Dimos Tsouros** is a PostDoc at the DTAI KU Leuven lab. His expertise is in interactive constraint acquisition, earning an honorable mention in the Doctoral Dissertation Award of ACP in 2022. He has a strong interest in rich interactive techniques between users and solvers, focusing on a more human-aware approach to the solving process. |
+|:----------------------------------------------------------------------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+| ![Prof. Tias Guns](https://people.cs.kuleuven.be/~tias.guns/img/profile_erc_square.jpeg) | **Prof. Tias Guns** works at the intersection of constraint solving, machine learning and explainable AI. With his prestigious ERC Consolidator grant on "Conversational Human-aware Technologies for Optimisation" he is pushing the boundaries of what can be done at the intersection of these fields. His team develops the Constraint Programming and Modeling library CPMpy, which serves as a core technology to investigate new ways of integrating ML and constraint solving through decision focussed learning, and explanation techniques for constraint solving through explainable CP. |
+|:----------------------------------------------------------------------------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+
 ### Tutorial Repository
 The following repository contains the code and runnable notebook for our Explainable Constraint Solving tutorials and talks: [https://github.com/CPMpy/XCP-explain](https://github.com/CPMpy/XCP-explain)
 
