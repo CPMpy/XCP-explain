@@ -64,6 +64,23 @@ pip install gurobipy exact
 └── visualize.py                   # Helper functions for visualization of constraints and solutions
 ```
 
+## How to cite?
+```bibtex
+@software{bleukx2024_tutorial,
+  author       = {Ignace Bleukx and
+                  Guns, Tias and
+                  Tsouros, Dimos},
+  title        = {{Explainable Constraint Solving: A hands-on 
+                   tutorial}},
+  month        = feb,
+  year         = 2024,
+  publisher    = {Zenodo},
+  version      = {v1.0},
+  doi          = {10.5281/zenodo.10694140},
+  url          = {https://doi.org/10.5281/zenodo.10694140}
+}
+```
+
 ## References
 
 > [1] Korikov, A., & Beck, J. C. (2021). Counterfactual explanations via inverse constraint programming. In 27th International Conference on Principles and Practice of Constraint Programming (CP 2021). Schloss Dagstuhl-Leibniz-Zentrum für Informatik.
