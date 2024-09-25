@@ -4,29 +4,41 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-
 def visualize(sol, factory, highlight_cover=False):
     weeks = [f"Week {i + 1}" for i in range(factory.data.horizon // 7)]
     weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     nurses = factory.data.staff['name'].tolist()
 
     df = pd.DataFrame(sol,
-                      columns=pd.MultiIndex.from_product((weeks, weekdays)),
+                      columns=pd.MultiIndex.from_product((weeks, weekdays), names=("Week", "Day")),
                       index=factory.data.staff.name)
 
-    mapping = factory.idx_to_name
-    df = df.map(lambda v: mapping[v] if v is not None and v < len(mapping) else '')  # convert to shift names
 
-    for shift_type in factory.shift_name_to_idx:
-        if shift_type == "F":
-            continue
+    total_minutes = df.map(lambda i : ([0] + list(factory.data.shifts.Length))[i] if i is not None else 0).sum(axis=1).astype(int)
+
+    mapping = factory.idx_to_name
+    df = df.map(lambda v: mapping[v] if v is not None else '')  # convert to shift names
+
+    real_shifts = sorted(set(factory.shift_name_to_idx) - {"F"})
+    total_shifts = pd.DataFrame(columns=pd.MultiIndex.from_product([["#Shifts"], real_shifts]), index=df.index)
+    for shift_type in real_shifts:
+        total_shifts[("#Shifts", shift_type)] = (df == shift_type).sum(axis=1)
+
+    for shift_type in real_shifts:
         sums = (df == shift_type).sum()  # cover for each shift type
         req = factory.data.cover["Requirement"][factory.data.cover["ShiftID"] == shift_type]
         req.index = sums.index
         df.loc[f'Cover {shift_type}'] = sums.astype(str) + "/" + req.astype(str)
-    df["Total shifts"] = (df != "F").sum(axis=1)  # shifts done by nurse
 
-    subset = (df.index.tolist()[:-len(factory.data.shifts)], df.columns[:-1])
+
+    df = pd.concat([df, total_shifts], axis=1)
+    df["#Minutes"] = total_minutes
+    df = df.fillna(0)
+    df["#Shifts"] = df["#Shifts"].astype(int)
+    df["#Minutes"] = df["#Minutes"].astype(int)
+
+
+    subset = (df.index.tolist()[:-len(factory.data.shifts)], df.columns[:-(len(real_shifts)+1)])
     style = df.style.set_table_styles([{'selector': '.data', 'props': [('text-align', 'center')]},
                                        {'selector': '.col_heading', 'props': [('text-align', 'center')]},
                                        {'selector': '.col7', 'props': [('border-left',"2px solid black")]}])
