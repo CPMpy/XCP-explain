@@ -67,146 +67,42 @@ def color_shift(shift, factory):
     r,g,b = (round(255*val) for val in cmap.colors[factory.shift_name_to_idx[shift]])
     return f"background-color: rgb({r},{g},{b})"
 
+def highlight_changes(new_sol, old_sol, factory):
 
-def highlight_cell(cells, factory):
-    def do_function(x):
-        styles = []
-        for i, _ in enumerate(x):
-            txt = ""
-            if (x.name, i) in cells:
-                color = cells[(x.name, i)]
-                txt = "background: "
-                if isinstance(color, tuple): # rgb/rgba values
-                    if len(color) == 3:
-                        txt += f"rgb{color}"
-                    elif len(color) == 4:
-                        txt += f"rgba{color}"
-                    else:
-                        raise ValueError(f"Unknown color value {color}")
-                else:
-                    txt += color
-            styles.append(txt)
-        return styles
-    return do_function
+    style = visualize(new_sol, factory)
+    df_css = pd.DataFrame(new_sol != old_sol)
+    df_css = df_css.reindex(index=style.index, columns=style.columns, fill_value="")
+    print(df_css)
+    df_css = df_css.map(lambda x : "border: 5px solid lawngreen" if x else "")
+    print(df_css)
+    return style.apply(apply_styles, styles=df_css, axis=None)
 
 
-def highlight_cell_border(cells, factory):
-    def do_function(x):
-        return [f'border: 5px {cells[x.name, i]}'
-                if (x.name, i) in cells else "" for i, _ in enumerate(x)]
 
-    return do_function
-
-
-def highlight_cover(covers, factory):
-    nurses = factory.data.staff['name'].tolist()
-
-    def do_function(x):
-        borders = []
-        for i, _ in enumerate(x):
-            s = ''
-            if i in covers:
-                s += 'border-left: 5px solid red; border-right:5px solid red;'
-                if x.name == nurses[0]:
-                    s += 'border-top: 5px solid red;'
-                if x.name.startswith("Cover"):
-                    s += 'border-bottom: 5px solid red;'
-            borders += [s]
-        return borders
-
-    return do_function
-
-
-def highlight_row(nurse_id, work_windows, factory):
-    nurses = factory.data.staff['name'].tolist()
-
-
-    def do_function(x):
-        borders = []
-
-        if x.name not in nurses: return [''] * len(x)
-        n_id = nurses.index(x.name)
-        windows = [win for n,win in zip(nurse_id, work_windows) if n == n_id]
-        for i, _ in enumerate(x):
-            s = ''
-            if any(i in w for w in windows):
-                s = 'border-top: 5px solid red; border-bottom:5px solid red;'
-                if any(i == w[0] for w in windows):
-                    s += 'border-left: 5px solid red;'
-                if any(i == w[-1] for w in windows):
-                    s += 'border-right: 5px solid red;'
-            borders += [s]
-        return borders
-
-    return do_function
-
-
-def highlight_weekends(nurse_id, factory):
-    nurses = factory.data.staff['name'].tolist()
-
-    def do_function(x):
-        borders = []
-        names = [nurses[id] for id in nurse_id]
-        for i, _ in enumerate(x):
-            s = ''
-            if i % 7 in [5, 6]:
-                if x.name in names:
-                    s = 'border-top: 5px solid indigo; border-bottom:5px solid indigo;'
-                    if i % 7 == 5:
-                        s += 'border-left: 5px solid indigo;'
-                    if i % 7 == 6:
-                        s += 'border-right: 5px solid indigo;'
-            borders += [s]
-        return borders
-
-    return do_function
-
-
-def highlight_changes(nurse_view, opt_sol, factory):
-    nurses = factory.data.staff['name'].tolist()
-
+def visualize_constraints(constraints, nurse_view, factory):
     style = visualize(nurse_view.value(), factory)
-    cells = {}
-    for i in range(np.size(opt_sol, 0)):
-        for j in range(np.size(opt_sol, 1)):
-            if nurse_view[i, j].value() != opt_sol[i, j]:
-                cells.update({(nurses[i], j): "solid lawngreen"})
-    # cells = {(nurses[i], j): "solid lawngreen" for j in range(np.size(opt_sol,0)) for i in range(np.size(opt_sol,1)) if nurse_view[i,j].value() != opt_sol[i,j]}
-    style.apply(highlight_cell_border(cells, factory), axis=1)
-    return style
 
-
-def visualize_constraints(subset, nurse_view, factory, do_clear=True):
-    if do_clear:
-        nurse_view.clear()
-    style = visualize(nurse_view.value(), factory)
-    cells = {(cons.cell[0], cons.cell[1]): cons.cell[2] for cons in subset if hasattr(cons, "cell")}
-    style.apply(highlight_cell(cells, factory), axis=1)
-
-    covers = {cons.cover for cons in subset if hasattr(cons, 'cover')}
-    style.apply(highlight_cover(covers, factory), axis=1)
-    nurse_id = {cons.nurse_id for cons in subset if hasattr(cons, 'nurse_id') and hasattr(cons, 'window')}
-    windows = {cons.window for cons in subset if hasattr(cons, 'window')}
-    style.apply(highlight_row(nurse_id, windows, factory), axis=1)
-    nurse_id = {cons.nurse_id for cons in subset if hasattr(cons, 'nurse_id') and hasattr(cons, 'max_weekends')}
-    style.apply(highlight_weekends(nurse_id, factory), axis=1)
-    return style
-
+    df_css = pd.DataFrame(index=style.index, columns=style.columns)
+    df_css.fillna("", inplace=True)
+    for cons in constraints:
+        cons.visualize(df_css)
+    return style.apply(apply_styles, styles=df_css, axis=None)
 
 def visualize_step(step, nurse_view, factory):
     E, S, N = step
     print(f"Propagating constraint: {next(iter(S))}")
     if any(len(vals) == 0 for vals in N.values()):
         # found UNSAT
-        return visualize_constraints(S, nurse_view, factory=factory, do_clear=False)
+        return visualize_constraints(S, nurse_view, factory=factory)
     else:
         for v in E:
             if E[v] > N[v]:
-                # derived something here
-                assert len(N[v]) <= 1, "only allow assigments here..."
+                # derived something for this variable
+                assert len(N[v]) <= 1, "only allow assigments here... (TODO? how to visualize negative facts?)"
                 # hacky way to find index
                 r = int(v.name.split(",")[0].split('[')[1])
                 c = int(v.name.split(",")[1].split(']')[0])
                 nurse_view[r, c]._value = next(iter(N[v]))
 
-    return visualize_constraints(S, nurse_view, factory=factory, do_clear=False)
+    return visualize_constraints(S, nurse_view, factory=factory)
+
