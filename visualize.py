@@ -77,6 +77,10 @@ def highlight_changes(new_sol, old_sol, factory):
     print(df_css)
     return style.apply(apply_styles, styles=df_css, axis=None)
 
+# Function to apply CSS styles to each cell
+def apply_styles(x, styles):
+    # The styles DataFrame is returned directly
+    return styles
 
 
 def visualize_constraints(constraints, nurse_view, factory):
