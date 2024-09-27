@@ -70,11 +70,18 @@ def color_shift(shift, factory):
 def highlight_changes(new_sol, old_sol, factory):
 
     style = visualize(new_sol, factory)
-    df_css = pd.DataFrame(new_sol != old_sol)
-    df_css = df_css.reindex(index=style.index, columns=style.columns, fill_value="")
-    print(df_css)
-    df_css = df_css.map(lambda x : "border: 5px solid lawngreen" if x else "")
-    print(df_css)
+    shape = style.data.shape
+
+    neq = new_sol != old_sol
+    diff0 = shape[0] - neq.shape[0]
+    diff1 = shape[1] - neq.shape[1]
+    neq = np.pad(neq, ((0, diff0), (0, diff1)), constant_values=False)
+
+    df_css = pd.DataFrame(neq)
+    df_css.index = style.index
+    df_css.columns = style.columns
+
+    df_css = df_css.map(lambda x: "border: 5px solid lawngreen" if x else "")
     return style.apply(apply_styles, styles=df_css, axis=None)
 
 # Function to apply CSS styles to each cell
@@ -83,7 +90,10 @@ def apply_styles(x, styles):
     return styles
 
 
-def visualize_constraints(constraints, nurse_view, factory):
+def visualize_constraints(constraints, nurse_view, factory, do_clear=True):
+    if do_clear:
+        nurse_view.clear()
+
     style = visualize(nurse_view.value(), factory)
 
     df_css = pd.DataFrame(index=style.index, columns=style.columns)
@@ -97,7 +107,7 @@ def visualize_step(step, nurse_view, factory):
     print(f"Propagating constraint: {next(iter(S))}")
     if any(len(vals) == 0 for vals in N.values()):
         # found UNSAT
-        return visualize_constraints(S, nurse_view, factory=factory)
+        return visualize_constraints(S, nurse_view, factory=factory, do_clear=False)
     else:
         for v in E:
             if E[v] > N[v]:
