@@ -52,8 +52,7 @@ def visualize(sol, factory, highlight_cover=False):
             if fill == req:
                 return ''
             return 'color : red'
-
-        subset = (df.index.tolist()[-len(factory.data.shifts):], df.columns[:-1])
+        subset = (df.index.tolist()[-len(factory.data.shifts):], df.columns[:-2])
         style = style.map(highlight, subset=subset)
 
     return style
