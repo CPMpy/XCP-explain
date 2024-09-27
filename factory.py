@@ -7,7 +7,7 @@ import cpmpy as cp
 
 FREE = 0
 
-class NurseSchedulingFactory2:
+class NurseSchedulingFactory:
 
     def __init__(self, data:SchedulingProblem):
 
@@ -35,7 +35,8 @@ class NurseSchedulingFactory2:
         self.on_request_color = (183, 119, 41)  # copper-ish
         self.off_request_color = (212, 175, 55)  # gold-ish
 
-    def get_optimization_model(self):
+
+    def get_hard_constraints(self):
         model = cp.Model()
         model += self.shift_rotation()
         model += self.max_shifts()
@@ -47,10 +48,15 @@ class NurseSchedulingFactory2:
         model += self.days_off()
         model += self.min_consecutive_off()
 
+        return model
+
+    def get_optimization_model(self):
+
         cons_on, penalty_on = self.shift_on_requests(formulation="soft")
         cons_off, penalty_off = self.shift_off_requests(formulation="soft")
         cons_cover, penalty_cover = self.cover(formulation="soft")
 
+        model = self.get_hard_constraints()
         model += [cons_on, cons_off, cons_cover]
         obj_func = penalty_on + penalty_off + penalty_cover
         model.minimize(obj_func)
@@ -59,17 +65,7 @@ class NurseSchedulingFactory2:
 
     def get_decision_model(self):
 
-        model = cp.Model()
-        model += self.shift_rotation()
-        model += self.max_shifts()
-        model += self.max_minutes()
-        model += self.min_minutes()
-        model += self.max_consecutive()
-        model += self.min_consecutive()
-        model += self.weekend_shifts()
-        model += self.days_off()
-        model += self.min_consecutive_off()
-
+        model = self.get_hard_constraints()
         cons_on, penalty_on = self.shift_on_requests(formulation="hard")
         cons_off, penalty_off = self.shift_off_requests(formulation="hard")
         cons_cover, penalty_cover = self.cover(formulation="hard")
@@ -80,6 +76,17 @@ class NurseSchedulingFactory2:
 
         return model, self.nurse_view
 
+    def get_slack_model(self):
+
+        model = self.get_hard_constraints()
+
+        cons_on, penalty_on = self.shift_on_requests(formulation="hard")
+        cons_off, penalty_off = self.shift_off_requests(formulation="hard")
+        cons_cover, penalty_cover = self.cover(formulation="soft")
+
+        model += [cons_on, cons_off, cons_cover]
+
+        return model, self.nurse_view, self.slack_over, self.slack_under
 
     def shift_rotation(self):
         """
