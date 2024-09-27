@@ -118,5 +118,5 @@ def visualize_step(step, nurse_view, factory):
                 c = int(v.name.split(",")[1].split(']')[0])
                 nurse_view[r, c]._value = next(iter(N[v]))
 
-    return visualize_constraints(S, nurse_view, factory=factory)
+    return visualize_constraints(S, nurse_view, factory=factory, do_clear=False)
 
