@@ -3,6 +3,7 @@ import numpy as np
 import read_data
 from read_data import SchedulingProblem
 import cpmpy as cp
+from cpmpy.transformations.normalize import toplevel_list
 
 FREE = 0
 
@@ -60,6 +61,8 @@ class NurseSchedulingFactory:
         obj_func = penalty_on + penalty_off + penalty_cover
         model.minimize(obj_func)
 
+        model.constraints = toplevel_list(model.constraints, merge_and=False)
+
         return model, self.nurse_view
 
     def get_decision_model(self):
@@ -73,6 +76,8 @@ class NurseSchedulingFactory:
         obj_func = penalty_on + penalty_off + penalty_cover
         model.minimize(obj_func)
 
+        model.constraints = toplevel_list(model.constraints, merge_and=False)
+
         return model, self.nurse_view
 
     def get_slack_model(self):
@@ -84,6 +89,8 @@ class NurseSchedulingFactory:
         cons_cover, penalty_cover = self.cover(formulation="soft")
 
         model += [cons_on, cons_off, cons_cover]
+
+        model.constraints = toplevel_list(model.constraints, merge_and=False)
 
         return model, self.nurse_view, self.slack_over, self.slack_under
 
