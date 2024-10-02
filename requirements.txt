@@ -1,0 +1,18 @@
+# Requirements for solving
+# cpmpy
+ortools
+exact # for fast incremental solving
+numpy==2.2.1
+
+# Requirements for visualization
+pandas==2.2.3
+matplotlib
+
+# For running the notebook
+jupyter
+nbclassic
+rise
+
+# Utils
+faker
+frozendict
