@@ -10,6 +10,8 @@ from cpmpy.transformations.get_variables import get_variables
 from cpmpy.tools.mus import mus
 
 EPSILON = 0.01
+
+
 class DomainSet(frozendict):
 
     def __le__(self, other):
@@ -32,12 +34,12 @@ class DomainSet(frozendict):
 
     @staticmethod
     def from_vars(vars):
-        return DomainSet({var : frozenset(range(var.lb, var.ub+1)) for var in vars})
+        return DomainSet({var: frozenset(range(var.lb, var.ub + 1)) for var in vars})
 
     @staticmethod
     def from_literals(vars, lits):
-        # we need vars argument to ensure we have all of the variables needed
-        new_domset = {var : set(range(var.lb, var.ub+1)) for var in vars}
+        # we need vars argument to ensure we have all the variables needed
+        new_domset = {var: set(range(var.lb, var.ub + 1)) for var in vars}
         for lit in lits:
             if isinstance(lit, NegBoolView):
                 new_domset[lit._bv].remove(1)
@@ -48,13 +50,12 @@ class DomainSet(frozendict):
                 new_domset[var].remove(val)
             else:
                 raise ValueError(f"Unknown literal: {lit}")
-        return DomainSet({var : frozenset(vals) for var, vals in new_domset.items()})
+        return DomainSet({var: frozenset(vals) for var, vals in new_domset.items()})
 
     def literals(self):
-        if hasattr(self, "_lits"):
-            return self._lits
-        self._lits = frozenset({var != val for var, dom in self.items() for val in range(var.lb, var.ub+1) if val not in dom})
-        return self._lits
+        lits = frozenset(
+            {var != val for var, dom in self.items() for val in range(var.lb, var.ub + 1) if val not in dom})
+        return lits
 
 
 @dataclass
@@ -65,7 +66,7 @@ class Step:
     type: str
     guided: bool = True
     prev = None
-    is_relaxed : bool = False
+    is_relaxed: bool = False
 
     def __iter__(self):
         return iter([self.Rin, self.S, self.Rout])
@@ -73,7 +74,7 @@ class Step:
     def get_path(self):
         if self.prev is None:
             return [self]
-        return self.prev.get_path()+[self]
+        return self.prev.get_path() + [self]
 
     def relax(self, mus_type="mus", solver="ortools", time_limit=3600):
         from .subset import smus
@@ -87,7 +88,8 @@ class Step:
         # shrink Rin to scope of S
         newlits = self.Rout.literals() - self.Rin.literals()
         cons_vars = set(get_variables(self.S))
-        self.Rin = DomainSet({var : dom if var in cons_vars else frozenset(range(var.lb, var.ub+1)) for var, dom in self.Rin.items()})
+        self.Rin = DomainSet(
+            {var: dom if var in cons_vars else frozenset(range(var.lb, var.ub + 1)) for var, dom in self.Rin.items()})
         soft = self.Rin.literals()
 
         if len(soft):
@@ -100,7 +102,6 @@ class Step:
         self.Rout = DomainSet.from_literals(self.Rin.keys(), newlits)
         self.is_relaxed = True
 
-
     def __str__(self):
         cons_vars = get_variables(self.S)
         out = "Propagated constraints:\n"
@@ -108,7 +109,7 @@ class Step:
             out += str(cons) + "\n"
         out += "\n"
         for var in sorted(cons_vars, key=str):
-            if len(self.Rin[var]) == (var.ub+1-var.lb) and self.Rin[var] == self.Rout[var]:
+            if len(self.Rin[var]) == (var.ub + 1 - var.lb) and self.Rin[var] == self.Rout[var]:
                 continue
             else:
                 out += f"{var}:\t"
@@ -120,9 +121,10 @@ class Step:
                 out += "\n"
         return out
 
-    def __repr__(self): return self.__str__()
+    def __repr__(self):
+        return self.__str__()
+
 
 # some small tests
 if __name__ == "__main__":
     from cpmpy import *
-
