@@ -16,3 +16,4 @@ rise
 # Utils
 faker
 frozendict
+networkx
