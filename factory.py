@@ -343,15 +343,14 @@ class NurseSchedulingFactory:
             n = self.nurse_map.index(request['# EmployeeID'])
             shift = self.shift_name_to_idx[request['ShiftID']]
             day = request['Day']
+            expr = self.nurse_view[n, day] == shift
+            expr.set_description(
+                f"{self.data.staff.iloc[n]['name']} requests to work shift {self.idx_to_name[shift]} on {self.days[day]}")
+            expr.visualize = get_visualizer(n, day)
             if formulation == "hard":
-                constraint = self.nurse_view[n, day] == shift
-                constraint.set_description(f"{self.data.staff.iloc[n]['name']} requests to work shift {self.idx_to_name[shift]} on {self.days[day]}")
-                constraint.visualize = get_visualizer(n, day)
-                constraints.append(constraint)
+                constraints.append(expr)
             else: # penalty
-                expr = self.nurse_view[n,day] != shift
-                expr.set_description(f"{self.data.staff.iloc[n]['name']}'s request to work shift {self.idx_to_name[shift]} on {self.days[day]} is denied")
-                penalty.append(request['Weight'] * expr)
+                penalty.append(request['Weight'] * ~expr)
 
         return constraints, cp.sum(penalty)
 
@@ -372,15 +371,14 @@ class NurseSchedulingFactory:
             n = self.nurse_map.index(request['# EmployeeID'])
             shift = self.shift_name_to_idx[request['ShiftID']]
             day = request['Day']
+            expr = self.nurse_view[n, day] != shift
+            expr.set_description(
+                f"{self.data.staff.iloc[n]['name']} requests not to work shift {self.idx_to_name[shift]} on {self.days[day]}")
+            expr.visualize = get_visualizer(n, day)
             if formulation == "hard":
-                constraint = self.nurse_view[n, day] != shift
-                constraint.set_description(f"{self.data.staff.iloc[n]['name']} requests not to work shift {self.idx_to_name[shift]} on {self.days[day]}")
-                constraint.visualize = get_visualizer(n, day)
-                constraints.append(constraint)
+                constraints.append(expr)
             else:  # penalty
-                expr = self.nurse_view[n, day] == shift
-                expr.set_description(f"{self.data.staff.iloc[n]['name']}'s request to not work shift {self.idx_to_name[shift]} on {self.days[day]} is denied")
-                penalty.append(request['Weight'] * expr)
+                penalty.append(request['Weight'] * ~expr)
 
         return constraints, cp.sum(penalty)
 
