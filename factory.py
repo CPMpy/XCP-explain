@@ -65,6 +65,21 @@ class NurseSchedulingFactory:
 
         return model, self.nurse_view
 
+    def get_multi_objective_model(self):
+
+        cons_on, penalty_on = self.shift_on_requests(formulation="soft")
+        cons_off, penalty_off = self.shift_off_requests(formulation="soft")
+        cons_cover, penalty_cover = self.cover(formulation="soft")
+
+        model = self.get_hard_constraints()
+        model += [cons_on, cons_off, cons_cover]
+        obj_func = penalty_on + penalty_off + penalty_cover
+        model.minimize(obj_func)
+
+        model.constraints = toplevel_list(model.constraints, merge_and=False)
+
+        return model, self.nurse_view, penalty_on, penalty_off, penalty_cover
+
     def get_decision_model(self):
 
         model = self.get_hard_constraints()
