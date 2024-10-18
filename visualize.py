@@ -98,7 +98,8 @@ def visualize_constraints(constraints, nurse_view, factory, do_clear=True):
     df_css = pd.DataFrame(index=style.index, columns=style.columns)
     df_css.fillna("", inplace=True)
     for cons in constraints:
-        cons.visualize(df_css)
+        if hasattr(cons, "visualize"):
+            cons.visualize(df_css)
     return style.apply(apply_styles, styles=df_css, axis=None)
 
 def visualize_step(step, nurse_view, factory):

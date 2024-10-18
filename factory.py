@@ -65,6 +65,21 @@ class NurseSchedulingFactory:
 
         return model, self.nurse_view
 
+    def get_multi_objective_model(self):
+
+        cons_on, penalty_on = self.shift_on_requests(formulation="soft")
+        cons_off, penalty_off = self.shift_off_requests(formulation="soft")
+        cons_cover, penalty_cover = self.cover(formulation="soft")
+
+        model = self.get_hard_constraints()
+        model += [cons_on, cons_off, cons_cover]
+        obj_func = penalty_on + penalty_off + penalty_cover
+        model.minimize(obj_func)
+
+        model.constraints = toplevel_list(model.constraints, merge_and=False)
+
+        return model, self.nurse_view, penalty_on, penalty_off, penalty_cover
+
     def get_decision_model(self):
 
         model = self.get_hard_constraints()
@@ -350,7 +365,7 @@ class NurseSchedulingFactory:
                 constraints.append(constraint)
             else: # penalty
                 expr = self.nurse_view[n,day] != shift
-                expr.set_description(f"{self.data.staff.iloc[n]['name']}'s request to work shift {self.idx_to_name[shift]} on {self.days[day]} is denied")
+                expr.set_description(f"Deny {self.data.staff.iloc[n]['name']}'s request to work shift {self.idx_to_name[shift]} on {self.days[day]}")
                 penalty.append(request['Weight'] * expr)
 
         return constraints, cp.sum(penalty)
@@ -374,12 +389,12 @@ class NurseSchedulingFactory:
             day = request['Day']
             if formulation == "hard":
                 constraint = self.nurse_view[n, day] != shift
-                constraint.set_description(f"{self.data.staff.iloc[n]['name']} requests to work shift {self.idx_to_name[shift]}")
+                constraint.set_description(f"{self.data.staff.iloc[n]['name']} requests not to work shift {self.idx_to_name[shift]} on {self.days[day]}")
                 constraint.visualize = get_visualizer(n, day)
                 constraints.append(constraint)
             else:  # penalty
                 expr = self.nurse_view[n, day] == shift
-                expr.set_description("{self.data.staff.iloc[n]['name']}'s request to not work shift {self.idx_to_name[shift]} on {self.days[day]} is denied")
+                expr.set_description(f"Deny {self.data.staff.iloc[n]['name']}'s request not to work shift {self.idx_to_name[shift]} on {self.days[day]}")
                 penalty.append(request['Weight'] * expr)
 
         return constraints, cp.sum(penalty)
