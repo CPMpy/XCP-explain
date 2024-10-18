@@ -2,7 +2,7 @@
 # cpmpy
 ortools
 exact # for fast incremental solving
-numpy==2.2.1
+numpy==2.1.2
 
 # Requirements for visualization
 pandas==2.2.3
