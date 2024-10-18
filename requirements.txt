@@ -1,11 +1,11 @@
 # Requirements for solving
-# cpmpy
+cpmpy
 ortools
 exact # for fast incremental solving
-numpy==2.1.2
+numpy
 
 # Requirements for visualization
-pandas==2.2.3
+pandas==2.1.4
 matplotlib
 
 # For running the notebook
