@@ -1,5 +1,5 @@
 # Requirements for solving
-# cpmpy
+cpmpy
 ortools
 exact # for fast incremental solving
 numpy
