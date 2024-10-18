@@ -135,7 +135,7 @@ class NurseSchedulingFactory:
 
         def get_visualizer(nurse_idx, shift_id):
             def visualize(styler):
-                styler[("#Shifts", shift_id)].iloc[nurse_idx] += f'border: dotted red;'
+                styler[("#Shifts", shift_id)].iloc[nurse_idx] += f'border: 5px dotted red;'
             return visualize
 
         constraints = []
@@ -158,7 +158,7 @@ class NurseSchedulingFactory:
 
         def get_visualizer(nurse_idx):
             def visualize(styler):
-                styler.iloc[nurse_idx, -1] += 'border: dotted red;'
+                styler.iloc[nurse_idx, -1] += 'border: 5px dotted red;'
             return visualize
 
         constraints = []
@@ -179,7 +179,7 @@ class NurseSchedulingFactory:
         """
         def get_visualizer(nurse_idx):
             def visualize(styler):
-                styler.iloc[nurse_idx, -1] += 'border: dotted green;'
+                styler.iloc[nurse_idx, -1] += 'border: 5px dotted green;'
             return visualize
 
         constraints = []
@@ -203,10 +203,10 @@ class NurseSchedulingFactory:
         """
         def get_visualizer(nurse_idx, window):
             def visualize(styler):
-                styler.iloc[nurse_idx, window[0]] += "border-left: solid red;"
-                styler.iloc[nurse_idx, window[-1]] += "border-right: solid red;"
+                styler.iloc[nurse_idx, window[0]] += "border-left: 5px solid red;"
+                styler.iloc[nurse_idx, window[-1]] += "border-right: 5px solid red;"
                 for day in window:
-                    styler.iloc[nurse_idx, day] += "border-top: solid red; border-bottom: solid red;"
+                    styler.iloc[nurse_idx, day] += "border-top: 5px solid red; border-bottom: 5px solid red;"
             return visualize
 
 
@@ -233,10 +233,10 @@ class NurseSchedulingFactory:
 
         def get_visualizer(nurse_idx, window):
             def visualize(styler):
-                styler.iloc[nurse_idx, window[0]] += "border-left: dotted teal;"
-                styler.iloc[nurse_idx, window[-1]] += "border-right: dotted teal;"
+                styler.iloc[nurse_idx, window[0]] += "border-left: 5px dotted teal;"
+                styler.iloc[nurse_idx, window[-1]] += "border-right: 5px dotted teal;"
                 for day in window:
-                    styler.iloc[nurse_idx, day] += "border-top: dotted teal; border-bottom: dotted teal;"
+                    styler.iloc[nurse_idx, day] += "border-top: 5px dotted teal; border-bottom: 5px dotted teal;"
 
             return visualize
 
@@ -267,8 +267,8 @@ class NurseSchedulingFactory:
         def get_visualizer(nurse_idx):
             def visualize(styler):
                 for sat, sun in self.weekends:
-                    styler.iloc[nurse_idx, sat] += "border-left: solid indigo; border-top: solid indigo; border-bottom: solid indigo;"
-                    styler.iloc[nurse_idx, sun] += "border-right: solid indigo; border-top: solid indigo; border-bottom: solid indigo;"
+                    styler.iloc[nurse_idx, sat] += "border-left: 5px solid indigo; border-top: 5px solid indigo; border-bottom: 5px solid indigo;"
+                    styler.iloc[nurse_idx, sun] += "border-right: 5px solid indigo; border-top: 5px solid indigo; border-bottom: 5px solid indigo;"
             return visualize
 
         constraints = []
@@ -311,10 +311,10 @@ class NurseSchedulingFactory:
 
         def get_visualizer(nurse_idx, window):
             def visualize(styler):
-                styler.iloc[nurse_idx, window[0]] += "border-left: dotted lightgreen;"
-                styler.iloc[nurse_idx, window[-1]] += "border-right: dotted lightgreen;"
+                styler.iloc[nurse_idx, window[0]] += "border-left: 5px dotted lightgreen;"
+                styler.iloc[nurse_idx, window[-1]] += "border-right: 5px dotted lightgreen;"
                 for day in window:
-                    styler.iloc[nurse_idx, day] += "border-top: dotted lightgreen; border-bottom: dotted lightgreen;"
+                    styler.iloc[nurse_idx, day] += "border-top: 5px dotted lightgreen; border-bottom: 5px dotted lightgreen;"
 
             return visualize
 
@@ -411,11 +411,11 @@ class NurseSchedulingFactory:
         def get_visualizer(day, shift):
 
             def visualize(styler):
-                styler.iloc[0, day] += "border-top: solid red;"
+                styler.iloc[0, day] += "border-top: 5px solid red;"
                 for n in range(self.n_nurses):
-                    styler.iloc[n, day] += "border-left: solid red; border-right: solid red;"
-                styler.iloc[n, day] += "border-bottom: solid red;"
-                styler.iloc[n + shift, day] += "border: solid red;"
+                    styler.iloc[n, day] += "border-left: 5px solid red; border-right: 5px solid red;"
+                styler.iloc[n, day] += "border-bottom: 5px solid red;"
+                styler.iloc[n + shift, day] += "border: 5px solid red;"
             return visualize
 
 
