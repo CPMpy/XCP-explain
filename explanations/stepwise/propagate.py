@@ -111,10 +111,16 @@ class CPPropagate(Propagator):
         for var in cons_vars: # set leftover domains of vars
             solver += cp.Table([var],[[val] for val in domains[var]])
 
+        req_kwargs = dict(
+            stop_after_presolve=True,
+            keep_all_feasible_solutions_in_presolve=True,
+            fill_tightened_domains_in_response=True
+        )
+
         if only_unit_propagation:
-            solver.solve(stop_after_presolve=True,fill_tightened_domains_in_response=True, **self.prop_kwargs)
+            solver.solve(**req_kwargs, **self.prop_kwargs)
         else:
-            solver.solve(stop_after_presolve=True, fill_tightened_domains_in_response=True)
+            solver.solve(**req_kwargs)
 
         bounds = solver.ort_solver.ResponseProto().tightened_variables
 
