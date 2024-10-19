@@ -62,6 +62,7 @@ H,10,E,2
 H,7,L,2
 H,5,L,2
 
+
 SECTION_SHIFT_OFF_REQUESTS
 # EmployeeID, Day, ShiftID, Weight
 A,2,L,2
@@ -84,6 +85,7 @@ H,1,L,2
 H,6,E,2
 H,9,L,2
 H,12,L,2
+
 
 SECTION_COVER
 # Day, ShiftID, Requirement, Weight for under, Weight for over

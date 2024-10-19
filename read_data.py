@@ -48,16 +48,25 @@ def get_data(fname):
     staff = tag_to_data(string, "SECTION_STAFF", index_col=False)
     maxes = staff["MaxShifts"].str.split("|", expand=True)
     for col in maxes:
-        cname = maxes[col].iloc[0].split("=")[0]
+        shift_id = maxes[col].iloc[0].split("=")[0]
         column = maxes[col].apply(lambda x : x.split("=")[1])
-        staff[cname] = column.astype(int)
+        staff[f"max_shifts_{shift_id}"] = column.astype(int)
 
     staff["name"] = [fake.unique.first_name() for _ in staff.index]
     problem.staff = staff
 
-    problem.days_off = tag_to_data(string, "SECTION_DAYS_OFF", names=["EmployeeID", "DayIdx"])
-    problem.days_off["DayIdx"] = problem.days_off["DayIdx"].apply(lambda val : val if isinstance(val, int)
-                                                                         else [int(x) for x in val.split(",")])
+    days_off = tag_to_data(string, "SECTION_DAYS_OFF", datatype=str)
+    # process string to be EmployeeID, Day off for each line
+    rows = []
+    for line in days_off.split("\n")[1:]:
+        employee_id , *days = line.split(",")
+        rows += [dict(EmployeeID=employee_id, DayIndex= int(d)) for d in days]
+    problem.days_off = pd.DataFrame(rows)
+
+
+    # problem.days_off = tag_to_data(string, "SECTION_DAYS_OFF", names=["EmployeeID", "DayIdx"])
+    # problem.days_off["DayIdx"] = problem.days_off["DayIdx"].apply(lambda val : val if isinstance(val, int)
+    #                                                                      else [int(x) for x in val.split(",")])
     problem.shift_on = tag_to_data(string, "SECTION_SHIFT_ON_REQUESTS", index_col=False)
     problem.shift_off = tag_to_data(string, "SECTION_SHIFT_OFF_REQUESTS", index_col=False)
     problem.cover = tag_to_data(string, "SECTION_COVER", index_col=False)
@@ -65,6 +74,8 @@ def get_data(fname):
     return problem
 
 
+if __name__ == "__main__":
 
+    problem = get_data("Benchmarks/Instance12.txt")
 
-
+    print(problem)
