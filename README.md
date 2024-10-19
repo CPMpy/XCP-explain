@@ -8,9 +8,9 @@ This repository contains the code and runnable notebook for our Explainable Cons
 ### Latest: ECAI2024 version
 
 - Tutorial notebook (PDF will be added later): https://github.com/CPMpy/XCP-explain/blob/main/ecai2024_presentation.ipynb
-- Part 1 Google Colab: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/ecai2024_practice_part1.ipynb
-- Part 2 Google Colab: : https://colab.research.google.com/github/CPMpy/XCP-explain/blob/ecai2024_practice_part2.ipynb
-- Part 3 Google Colab: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/ecai2024_practice_part3.ipynb
+- Part 1 Google Colab: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_practice_part1.ipynb
+- Part 2 Google Colab: : https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_practice_part2.ipynb
+- Part 3 Google Colab: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_practice_part3.ipynb
 
 Explainable constraint solving is a sub-field of explainable AI (XAI) concerned with explaining constraint (optimization) problems. 
 Although constraint models are explicit: they are written down in terms of individual constraints that need to be satisfied, and the solution to such models can be non-trivial to understand.
