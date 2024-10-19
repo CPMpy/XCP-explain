@@ -61,6 +61,10 @@ E,13,L,2
 F,3,L,3
 F,4,L,3
 F,5,L,3
+H,11,L,2
+H,8,L,2
+H,9,E,2
+H,10,L,2
 
 SECTION_SHIFT_OFF_REQUESTS
 # EmployeeID, Day, ShiftID, Weight
