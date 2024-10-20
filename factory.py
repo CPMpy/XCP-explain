@@ -123,7 +123,8 @@ class NurseSchedulingFactory:
                     for d in range(self.data.horizon - 1):
                         cons = (self.nurse_view[n, d] == t + 1).implies(self.nurse_view[n, d + 1] != other_shift)
                         cons.set_description(
-                            f"Shift {other_shift} cannot follow {cannot_follow} for {self.data.staff.iloc[n]['name']}")
+                            f"None of {shift['cannot follow']} can follow "
+                            f"shift {self.idx_to_name[t+1]} for {self.data.staff.iloc[n]['name']}")
                         constraints.append(cons)
                         cons.visualize = lambda style : None
         return constraints
