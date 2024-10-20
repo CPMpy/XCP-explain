@@ -19,7 +19,7 @@ def visualize(sol, factory, highlight_cover=False):
     mapping = factory.idx_to_name
     df = df.map(lambda v: mapping[v] if v is not None else '')  # convert to shift names
 
-    real_shifts = sorted(set(factory.shift_name_to_idx) - {"F"})
+    real_shifts = sorted(set(factory.shift_name_to_idx) - {"-"})
     total_shifts = pd.DataFrame(columns=pd.MultiIndex.from_product([["#Shifts"], real_shifts]), index=df.index)
     for shift_type in real_shifts:
         total_shifts[("#Shifts", shift_type)] = (df == shift_type).sum(axis=1)

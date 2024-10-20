@@ -16,8 +16,8 @@ class NurseSchedulingFactory:
         self.n_nurses = len(data.staff)
         self.weekends = [(i - 1, i) for i in range(data.horizon) if i != 0 and (i + 1) % 7 == 0]
         self.shift_name_to_idx = {name: idx + 1 for idx, (name, _) in enumerate(data.shifts.iterrows())}
-        self.idx_to_name = ["F"] + [key for key in self.shift_name_to_idx]
-        self.shift_name_to_idx.update({"F": 0})
+        self.idx_to_name = ["-"] + [key for key in self.shift_name_to_idx]
+        self.shift_name_to_idx.update({"-": 0})
 
         self.nurse_map = list(self.data.staff["# ID"])
 
