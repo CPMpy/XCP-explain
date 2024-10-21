@@ -60,7 +60,7 @@ def visualize(sol, factory, highlight_cover=False):
 def color_shift(shift, factory):
     # cmap = ["yellow", "blue","red", "orange", "cyan"]
     cmap = plt.get_cmap("Set3") # https://matplotlib.org/2.0.2/examples/color/colormaps_reference.html
-    if shift is None or shift == '':
+    if shift is None or shift == '' or shift == '-':
         return 'background-color: white'
     # return f"background-color: {cmap(factory.shift_name_to_idx[shift])}"
     r,g,b = (round(255*val) for val in cmap.colors[factory.shift_name_to_idx[shift]])
