@@ -51,17 +51,6 @@ Note that for Gurobi, you will need a license in order to make full use of its p
 pip install gurobipy
 ```
 
-## Practice notebooks
-
-In this repository, you will find several practice notebooks named `ecai2024_practice_part<p>.ipynb`.
-In these notebooks, you can try out the techniques presented yourself and play with the functionality of the CPMPy explanations toolbox.
-
-You can either clone this repository and run the notebook on your local machine, or visit the following Google colab links:
-
-- Part1: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/ecai2024_practice_part1.ipynb
-- Part2: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/ecai2024_practice_part2.ipynb
-- Part3: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/ecai2024_practice_part3.ipynb
-
 ## Structure of the repository
 ```bash
 .

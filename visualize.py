@@ -19,7 +19,7 @@ def visualize(sol, factory, highlight_cover=False):
     mapping = factory.idx_to_name
     df = df.map(lambda v: mapping[v] if v is not None else '')  # convert to shift names
 
-    real_shifts = sorted(set(factory.shift_name_to_idx) - {"F"})
+    real_shifts = sorted(set(factory.shift_name_to_idx) - {"-"})
     total_shifts = pd.DataFrame(columns=pd.MultiIndex.from_product([["#Shifts"], real_shifts]), index=df.index)
     for shift_type in real_shifts:
         total_shifts[("#Shifts", shift_type)] = (df == shift_type).sum(axis=1)
@@ -60,7 +60,7 @@ def visualize(sol, factory, highlight_cover=False):
 def color_shift(shift, factory):
     # cmap = ["yellow", "blue","red", "orange", "cyan"]
     cmap = plt.get_cmap("Set3") # https://matplotlib.org/2.0.2/examples/color/colormaps_reference.html
-    if shift is None or shift == '':
+    if shift is None or shift == '' or shift == '-':
         return 'background-color: white'
     # return f"background-color: {cmap(factory.shift_name_to_idx[shift])}"
     r,g,b = (round(255*val) for val in cmap.colors[factory.shift_name_to_idx[shift]])
