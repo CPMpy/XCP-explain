@@ -1,9 +1,16 @@
 # Explainable Constraint Solving - A Hands-On Tutorial
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10694140.svg)](https://doi.org/10.5281/zenodo.10694140)
 
-### Authored by Ignace Bleukx, Dimos Tsouros and Tias Guns
+### by Ignace Bleukx, Dimos Tsouros and Tias Guns
 
 This repository contains the code and runnable notebook for our Explainable Constraint Solving tutorials and talks. 
+
+### Latest: ECAI2024 version
+
+- Tutorial notebook (PDF will be added later): https://github.com/CPMpy/XCP-explain/blob/main/ecai2024_presentation.ipynb
+- Part 1 Google Colab: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_practice_part1.ipynb
+- Part 2 Google Colab: : https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_practice_part2.ipynb
+- Part 3 Google Colab: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_practice_part3.ipynb
 
 Explainable constraint solving is a sub-field of explainable AI (XAI) concerned with explaining constraint (optimization) problems. 
 Although constraint models are explicit: they are written down in terms of individual constraints that need to be satisfied, and the solution to such models can be non-trivial to understand.
@@ -43,17 +50,6 @@ Note that for Gurobi, you will need a license in order to make full use of its p
 ```bash
 pip install gurobipy
 ```
-
-## Practice notebooks
-
-In this repository, you will find several practice notebooks named `ecai2024_practice_part<p>.ipynb`.
-In these notebooks, you can try out the techniques presented yourself and play with the functionality of the CPMPy explanations toolbox.
-
-You can either clone this repository and run the notebook on your local machine, or visit the following Google colab links:
-
-- Part1: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/ecai24/ecai2024_practice_part1.ipynb
-- Part2: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/ecai24/ecai2024_practice_part2.ipynb
-- Part3: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/ecai24/ecai2024_practice_part3.ipynb
 
 ## Structure of the repository
 ```bash
