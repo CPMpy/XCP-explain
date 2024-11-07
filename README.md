@@ -82,8 +82,8 @@ pip install gurobipy
   year         = 2024,
   publisher    = {Zenodo},
   version      = {v1.0},
-  doi          = {10.5281/zenodo.10694140},
-  url          = {https://doi.org/10.5281/zenodo.10694140}
+  doi          = {10.5281/zenodo.10694139},
+  url          = {https://doi.org/10.5281/zenodo.10694139}
 }
 ```
 
