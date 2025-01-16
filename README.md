@@ -72,18 +72,19 @@ pip install gurobipy
 
 ## How to cite?
 ```bibtex
-@software{bleukx2024_tutorial,
-  author       = {Ignace Bleukx and
-                  Guns, Tias and
-                  Tsouros, Dimos},
-  title        = {{Explainable Constraint Solving: A hands-on 
-                   tutorial}},
+@software{bleukx2024tutorial,
+  author       = {Bleukx, Ignace and
+                  Tsouros, Dimos and
+                  Guns, Tias},
+  title        = {Explainable Constraint Solving: A hands-on
+                   tutorial
+                  },
   month        = feb,
   year         = 2024,
   publisher    = {Zenodo},
   version      = {v1.0},
-  doi          = {10.5281/zenodo.10694139},
-  url          = {https://doi.org/10.5281/zenodo.10694139}
+  doi          = {10.5281/zenodo.10694140},
+  url          = {https://doi.org/10.5281/zenodo.10694140},
 }
 ```
 
