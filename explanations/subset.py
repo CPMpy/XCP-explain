@@ -98,8 +98,8 @@ def _corr_subsets(subset, dmap, solver, hard):
             SAT-grow will probably be a little faster but greedily finds a small set to hit
             Greedy-grow will not do ANY solving and simply exploit the values in the current solution
         """
-        # corr_subset = _maxsat_grow(sat_subset, dmap, hard=hard, time_limit=leftover(start_time, time_limit), solver_params=solver_params)
-        # corr_subset = _sat_grow(solver, sat_subset, dmap, time_limit=leftover(start_time, time_limit), solver_params=solver_params)
+        # corr_subset = _maxsat_grow(sat_subset)
+        # corr_subset = _sat_grow(solver, sat_subset, dmap)
         corr_subset = _greedy_grow(dmap)
         if len(corr_subset) == 0:
             return corr_subsets
