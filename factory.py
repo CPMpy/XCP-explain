@@ -135,7 +135,7 @@ class NurseSchedulingFactory:
 
         def get_visualizer(nurse_idx, shift_id):
             def visualize(styler):
-                styler[("#Shifts", shift_id)].iloc[nurse_idx] += f'border: 5px dotted red;'
+                styler.loc[styler.index[nurse_idx], ("#Shifts", shift_id)] += 'border: 5px dotted red;'
             return visualize
 
         constraints = []
