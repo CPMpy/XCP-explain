@@ -88,8 +88,7 @@ class NurseSchedulingFactory:
         cons_cover, penalty_cover = self.cover(formulation="hard")
 
         model += [cons_on, cons_off, cons_cover]
-        obj_func = penalty_on + penalty_off + penalty_cover
-        model.minimize(obj_func)
+        # hard formulation has empty penalties (cp.sum([]) == 0); no objective needed
 
         model.constraints = toplevel_list(model.constraints, merge_and=False)
 
