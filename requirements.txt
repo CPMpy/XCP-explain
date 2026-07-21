@@ -5,13 +5,12 @@ exact # for fast incremental solving
 numpy
 
 # Requirements for visualization
-pandas==2.1.4
+pandas
 matplotlib
 
-# For running the notebook
+# For running the notebook (`jupyter lab`, then Alt-R)
 jupyter
-nbclassic
-rise
+jupyterlab_rise
 
 # Utils
 faker
