@@ -113,3 +113,34 @@ def diagnose_optimal(soft, hard=[], weights=None, solver="ortools", hs_solver="o
     return [dmap[a] for a in corr_subset]
 
 
+def fastdiag_naive(soft, hard=[], solver="ortools"):
+    """Find a preferred MCS via divide-and-conquer (FastDiag).
+
+    The order of `soft` matters: earlier constraints are preferred to keep.
+    """
+    model, soft, assump = make_assump_model(soft, hard)
+    s = cp.SolverLookup.get(solver, model)
+    assert s.solve(assumptions=assump) is False, "The model should be UNSAT!"
+
+    def do_recursion(tocheck, other, delta):
+        if len(tocheck) != 0 and s.solve(assumptions=delta):
+            # constraints without tocheck is satisfiable, no need to recurse over other
+            return []
+
+        if len(other) == 1:
+            # only 1 'other' constraint remaining to search over
+            return list(other)  # base case of recursion
+
+        split = len(other) // 2  # determine split point
+        more_preferred, less_preferred = other[:split], other[split:]  # split constraints into two sets
+
+        # treat more preferred part as hard and find extra constraints in less preferred
+        delta1 = do_recursion(more_preferred, less_preferred, [c for c in delta if c not in set(more_preferred)])
+        # find which more preferred constraints exactly
+        delta2 = do_recursion(delta1, more_preferred, [c for c in delta if c not in set(delta1)])
+        return delta1 + delta2
+
+    mcs = do_recursion([], list(assump), list(assump))
+    dmap = dict(zip(assump, soft))
+    return [dmap[a] for a in mcs]
+

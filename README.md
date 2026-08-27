@@ -8,6 +8,7 @@ This repository contains the code and runnable notebook for our Explainable Cons
 ### Latest: ACP2026 Summer School version
 
 - Slides: https://github.com/CPMpy/XCP-explain/blob/main/acp26_presentation.pdf
+- Runnable notebook: https://github.com/CPMpy/XCP-explain/blob/main/acp26_presentation.ipynb
 
 Explainable constraint solving is a sub-field of explainable AI (XAI) concerned with explaining constraint (optimization) problems. 
 Although constraint models are explicit: they are written down in terms of individual constraints that need to be satisfied, and the solution to such models can be non-trivial to understand.

@@ -1,8 +1,9 @@
 # Requirements for solving
+numpy
 cpmpy
 ortools
-exact # for fast incremental solving
-numpy
+pumpkin-solver
+#exact # for fast incremental solving
 
 # Requirements for visualization
 pandas
