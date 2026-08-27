@@ -5,12 +5,9 @@
 
 This repository contains the code and runnable notebook for our Explainable Constraint Solving tutorials and talks. 
 
-### Latest: ECAI2024 version
+### Latest: ACP2026 Summer School version
 
-- Tutorial notebook (PDF will be added later): https://github.com/CPMpy/XCP-explain/blob/main/ecai2024_presentation.ipynb
-- Part 1 Google Colab: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_practice_part1.ipynb
-- Part 2 Google Colab: : https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_practice_part2.ipynb
-- Part 3 Google Colab: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_practice_part3.ipynb
+- Slides: https://github.com/CPMpy/XCP-explain/blob/main/acp26_presentation.pdf
 
 Explainable constraint solving is a sub-field of explainable AI (XAI) concerned with explaining constraint (optimization) problems. 
 Although constraint models are explicit: they are written down in terms of individual constraints that need to be satisfied, and the solution to such models can be non-trivial to understand.
@@ -20,8 +17,11 @@ We cover classical methods such as MUS/MCS extraction, and more recent advances 
 We demonstrate and give special attention to techniques that we have successfully (re-)implemented on top of the CPMpy constraint-solving library, which can be readily used today.
 
 The following presentations are available:
-
 * ACP 2024 Winter School lecture: [Notebook](https://github.com/CPMpy/XCP-explain/blob/main/acp24-sumschool-xcp.ipynb) [PDF slides](https://github.com/CPMpy/XCP-explain/blob/main/acp24-sumschool-xcp.slides.pdf) [YouTube video](https://youtu.be/nGr4lbgRvzw)
+* ECAI 2024 Tutorial notebook (PDF will be added later): https://github.com/CPMpy/XCP-explain/blob/main/ecai2024_presentation.ipynb
+* ECAI 2024 Part 1 Google Colab: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_practice_part1.ipynb
+* ECAI 2024 Part 2 Google Colab: : https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_practice_part2.ipynb
+* ECAI 2024 Part 3 Google Colab: https://colab.research.google.com/github/CPMpy/XCP-explain/blob/main/ecai2024_prac*tice_part3.ipynb
 * CP 2023 tutorial: [Notebook](https://github.com/CPMpy/XCP-explain/blob/main/hands-on-tutorial.ipynb) [HTML slides](https://raw.githack.com/CPMpy/CP23-tutorial/main/hands-on-tutorial.slides.html#/1) [PDF slides](https://github.com/CPMpy/XCP-explain/blob/main/hands-on-tutorial%20slides.pdf) [YouTube video](https://www.youtube.com/watch?v=V9DPHZq0gXk)
 The slide-show can be viewed from browser by opening the HTML version and using `Space` to go to the next slide.
 
